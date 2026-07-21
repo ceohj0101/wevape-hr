@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WE VAPE â ì ì ë©´ì  ê´ë¦¬</title>
+<style>
+  :root{--bg:#0d0f1a;--bg2:#161929;--bg3:#1e2236;--border:rgba(255,255,255,.08);--text:#e8eaf2;--muted:#6b7799;--accent:#5b7ff5;--accent2:#7c6af5}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+  .hero{background:linear-gradient(160deg,#0a0c18 0%,#111529 50%,#0f1a2e 100%);border-bottom:1px solid var(--border);padding:28px 24px 24px;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(91,127,245,.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(124,106,245,.08) 0%,transparent 50%);pointer-events:none}
+  .hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;position:relative}
+  .hero-logo{height:40px;object-fit:contain;filter:brightness(1.15) drop-shadow(0 0 8px rgba(91,127,245,.4))}
+  .hero-logo-text{font-size:22px;font-weight:900;letter-spacing:.12em;color:#fff;display:none}.hero-logo-text span{color:var(--accent)}
+  .hero-region{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+  .hero-title{font-size:22px;font-weight:900;color:var(--text);letter-spacing:-.5px}
+  .hero-sub{font-size:12px;color:var(--muted);margin-top:6px}
+  .header-right{display:flex;align-items:center;gap:10px;position:relative}
+  .update-time{font-size:11px;color:var(--muted)}
+  .reload-btn{bickground:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
+  .reload-btn:hover{background:rgba(255,255,255,.12)}.reload-btn:disabled{opacity:.4;cursor:not-allowed}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;padding:20px 24px 0}
+  .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
+  .stat-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+  .stat-num{font-size:32px;font-weight:900;line-height:1;color:var(--text)}
+  .stat-card.accent{border-color:rgba(91,127,245,.35);background:rgba(91,127,245,.08)}.stat-card.accent .stat-num{color:#7ba4ff}
+  .stat-card.green{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.06)}.stat-card.green .stat-num{color:#4ade80}
+  .stat-card.red{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.06)}.stat-card.red .stat-num{color:#f87171}
+  .emp-section{padding:20px 24px 0}
+  .section-hd{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .section-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;box-shadow:0 0 6px #4ade80}
+  .section-title{font-size:13px;font-weight:800;color:#4ade80}
+  .section-cnt{font-size:11px;color:var(--muted);background:var(--bg3);padding:2px 9px;border-radius:20px;border:1px solid var(--border);margin-left:4px}
+  .emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+  .emp-card{background:rgba(34,197,94,.06);border:1px solid rgba(74,222,128,.2);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color .15s;border-left:3px solid #22c55e;overflow:hidden}
+  .emp-card:hover{border-color:rgba(74,222,128,.45)}.emp-card.open{border-color:rgba(74,222,128,.45)}
+  .emp-card-head{display:flex;align-items:center;gap:10px}
+  .emp-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0;background:#22c55e}
+  .emp-name{font-size:14px;font-weight:800;color:var(--text)}.emp-role{font-size:10px;color:var(--muted);margin-top:2px}
+  .emp-tenure{margin-left:auto;font-size:10px;font-weight:700;color:#4ade80;background:rgba(74,222,128,.13);padding:3px 8px;border-radius:10px;white-space:nowrap}
+  .emp-hire{font-size:10px;color:#4ade80;margin-top:8px}
+  .emp-detail{display:none;padding-top:10px;border-top:1px solid rgba(74,222,128,.15);margin-top:10px}
+  .emp-card.open .emp-detail{display:block}
+  .divider{height:1px;background:var(--border);margin:20px 24px 0}
+  .pipeline-wrap{padding:20px 24px 0}
+  .pipeline-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+  .pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none}.pipeline::-webkit-scrollbar{display:none}
+  .pipe{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 15px;cursor:pointer;flex-shrink:0;transition:all .15s;min-width:80px}
+  .pipe:hover{border-color:rgba(255,255,255,.2)}.pipe.active{border-color:var(--accent);background:rgba(91,127,245,.1)}
+  .pipe-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .pipe-info .pipe-name{font-size:10px;font-weight:700;color:var(--muted)}.pipe-info .pipe-cnt{font-size:18px;font-weight:900;color:var(--text);line-height:1.1}
+  .pipe-arrow{color:var(--muted);font-size:12px;margin:0 4px;flex-shrink:0}
+  .content{padding:20px 24px}
+  .filter-row{display:flex;gap:7px;margin-bottom:18px;overflow-x:auto;scrollbar-width:none}.filter-row::-webkit-scrollbar{display:none}
+  .chip{padding:5px 13px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;border:1.5px solid transparent;transition:border-color .15s;background:var(--bg3);color:var(--muted)}
+  .chip:hover{color:var(--text)}.chip.active{color:var(--text);border-color:var(--accent);background:rgba(91,127,245,.12)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:12px}
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;cursor:pointer;transition:border-color .15s,transform .15s;overflow:hidden;border-left:4px solid var(--sc)}
+  .card:hover{border-color:rgba(255,255,255,.15);transform:translateY(-1px)}.card.open{border-color:rgba(255,255,255,.18)}
+  .card-inner{padding:16px}
+  .card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
+  .card-name{font-size:15px;font-weight:800;color:var(--text)}.card-sub{font-size:11px;color:var(--muted);margin-top:2px}
+  .badge{margin-left:auto;display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;white-space:nowrap;flex-shrink:0}
+  .badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+  .info-list{display:flex;flex-direction:column;gap:5px}
+  .info-row{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
+  .info-icon{width:14px;text-align:center;flex-shrink:0;font-size:11px}
+  .card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:11px;border-top:1px solid var(--border)}
+  .stars{display:flex;align-items:center;gap:1px}.star{font-size:12px;color:#fbbf24}.star.off{color:#2d3148}
+  .score-tag{font-size:10px;color:var(--muted);margin-left:4px}
+  .chevron{font-size:10px;color:var(--muted);transition:transform .2s}.card.open .chevron{transform:rotate(180deg)}
+  .detail{display:none;padding:14px 16px 16px;background:rgba(0,0,0,.2);border-top:1px solid var(--border)}
+  .card.open .detail{display:block}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .df label{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:3px}
+  .df p{font-size:11px;color:#a0aec8;line-height:1.5;white-space:pre-wrap;word-break:break-word}.df p.nil{color:#2d3148}
+  .df.wide{grid-column:span 2}
+  .notion-btn{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:6px 12px;background:rgba(91,127,245,.15);border-radius:7px;border:1px solid rgba(91,127,245,.3);font-size:11px;color:#7ba4ff;font-weight:700;text-decoration:none}
+  .notion-btn:hover{background:rgba(91,127,245,.25)}
+  .action-row{display:flex;gap:8px;margin-top:12px}
+  .act-btn{flex:1;padding:8px 0;border-radius:8px;border:1px solid;font-size:12px;font-weight:800;cursor:not-allowed;opacity:.5;letter-spacing:.03em}
+  .loading{text-align:center;padding:64px}
+  .spinner{display:inline-block;width:28px;height:28px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading p{margin-top:14px;font-size:13px;color:var(--muted)}
+  .empty{text-align:center;padding:60px;color:var(--muted);font-size:13px}
+  .empty-icon{font-size:36px;margin-bottom:10px}
+  .error-box{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:10px;padding:14px 16px;color:#f87171;font-size:12px;line-height:1.6;margin-bottom:16px}
+  .footer{text-align:center;padding:24px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);margin-top:20px}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-top">
+    <div>
+      <img class="hero-logo" src="https://github.com/user-attachments/assets/7ac07bf2-100b-4129-8124-d389a21c5cd9" alt="WE VAPE"
+        onerror="this.style.display='none';document.getElementById('lt').style.display='block'">
+      <div id="lt" class="hero-logo-text" style="display:none">WE<span>VAPE</span></div>
+    </div>
+    <div class="header-right">
+      <span class="update-time" id="lastUpdate"></span>
+      <button class="reload-btn" id="reloadBtn" onclick="loadData()">â» ìë¡ê³ ì¹¨</button>
+    </div>
+  </div>
+  <div>
+    <div class="hero-region">ì¸ì² Â· ê²½ê¸° ì§ì </div>
+    <div class="hero-title">ì ì ë©´ì  ê´ë¦¬</div>
+    <div class="hero-sub">ì§ìì íí© ë° ì±ì© íì´íë¼ì¸</div>
+  </div>
+</div>
+
+<div class="stats" id="stats"></div>
+<div class="emp-section" id="empSection" style="display:none">
+  <div class="section-hd"><div class="section-dot"></div><span class="section-title">ì¬ì§ì¤ ì§ì</span><span class="section-cnt" id="empCnt">0ëª</span></div>
+  <div class="emp-grid" id="empGrid"></div>
+</div>
+<div class="divider" id="empDivider" style="display:none"></div>
+<div class="pipeline-wrap"><div class="pipeline-title">ì±ì© íì´íë¼ì¸</div><div class="pipeline" id="pipeline"></div></div>
+<div class="content">
+  <div class="loading" id="loadingEl"><div class="spinner"></div><p>ë°ì´í° ë¶ë¬ì¤ë ì¤...</p></div>
+  <div id="mainContent" style="display:none">
+    <div id="errorBox" style="display:none"></div>
+    <div class="filter-row" id="filterRow"></div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="emptyEl" style="display:none"><div class="empty-icon">ð</div>í´ë¹ ì¡°ê±´ì ì§ììê° ìì´ì.</div>
+  </div>
+</div>
+<div class="footer">We Vape â ì ì ë©´ì  ê´ë¦¬ ë´ë¶ ì´ì ìë£ Â· <a href="https://app.notion.com/p/8887bdc6711744e78475aed069f808ca" style="color:var(--accent);text-decoration:none">ë¸ì ìë³¸</a></div>
+
+<script>
+const SM={
+  'ìë¥ì ì':{color:'#64748b',bg:'rgba(100,116,139,.18)',dot:'#64748b'},
+  'ìë¥í©ê²©':{color:'#60a5fa',bg:'rgba(96,165,250,.15)',dot:'#3b82f6'},
+  'ë©´ì ëê¸°':{color:'#fbbf24',bg:'rgba(251,191,36,.13)',dot:'#f59e0b'},
+  'ë©´ì ìì ':{color:'#c084fc',bg:'rgba(192,132,252,.15)',dot:'#a855f7'},
+  'ë©´ì ìë£':{color:'#fb923c',bg:'rgba(251,146,60,.13)',dot:'#f97316'},
+  'ìµì¢í©ê²©':{color:'#4ade80',bg:'rgba(74,222,128,.13)',dot:'#22c55e'},
+  'ë¶í©ê²©':{color:'#f87171',bg:'rgba(248,113,113,.13)',dot:'#ef4444'},
+};
+const PIPELINE=['ìë¥ì ì','ìë¥í©ê²©','ë©´ì ëê¸°','ë©´ì ìì ','ë©´ì ìë£'];
+const AV=['#6366f1','#8b5cf6','#ec4899','#0ea5e9','#f97316','#22c55e','#a855f7','#14b8a6','#f59e0b'];
+let rows=[],flt='all',openIdx=null,empOpenIdx=null;
+
+async function loadData(){
+  const btn=document.getElementById('reloadBtn');
+  btn.disabled=true;btn.textContent='...';
+  document.getElementById('loadingEl').style.display='block';
+  document.getElementById('mainContent').style.display='none';
+  document.getElementById('stats').innerHTML='';
+  document.getElementById('pipeline').innerHTML='';
+  try{
+    const r=await fetch('data.json?_='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    rows=d.results||[];
+    if(d.updated){
+      const t=new Date(d.updated).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+      document.getElementById('lastUpdate').textContent=t+' ìë°ì´í¸';
+    }
+  }catch(e){
+    rows=[];
+    const eb=document.getElementById('errorBox');
+    eb.className='error-box';eb.textContent='â ï¸ ë¡ë ì¤í¨: '+e.message;eb.style.display='block';
+  }
+  btn.disabled=false;btn.textContent='â» ìë¡ê³ ì¹¨';
+  document.getElemntById('loadingEl').style.display='none';
+  document.getElementById('mainContent').style.display='block';
+  renderStats();renderEmployees();renderPipeline();renderFilters();renderCards();
+}
+
+const cnt=s=>rows.filter(r=>r['ì§íìí']===s).length;
+
+function renderStats(){
+  const inP=cnt('ìë¥ì ì')+cnt('ìë¥í©ê²©')+cnt('ë©´ì ëê¸°')+cnt('ë©´ì ìì ')+cnt('ë©´ì ìë£');
+  document.getElementById('stats').innerHTML=`
+    <div class="stat-card"><div class="stat-label">ì ì²´ ì§ìì</div><div class="stat-num">${rows.length}</div></div>
+    <div class="stat-card accent"><div class="stat-label">ì§í ì¤</div><div class="stat-num">${inP}</div></div>
+    <div class="stat-card green"><div class="stat-label">ì¬ì§ì¤</div><div class="stat-num">${cnt('ìµì¢í©ê²©')}</div></div>
+    <div class="stat-card red"><div class="stat-label">ë¶í©ê²©</div><div class="stat-num">${cnt('ë¶í©ê²©')}</div></div>`;
+}
+
+function renderEmployees(){
+  const emps=rows.filter(r=>r['ì§íìí']==='ìµì¢í©ê²©');
+  const sec=document.getElementById('empSection'),div=document.getElementById('empDivider');
+  if(!emps.length){sec.style.display='none';div.style.display='none';return;}
+  sec.style.display='block';div.style.display='block';
+  document.getElementById('empCnt').textContent=emps.length+'ëª';
+  document.getElementById('empGrid').innerHTML=emps.map((r,i)=>{
+    const ten=r['ìì¬ì¼']?tenure(r['ìì¬ì¼']):'';
+    const isOpen=empOpenIdx===i;
+    return `<div class="emp-card${isOpen?' open':''}" onclick="toggleEmp(${i})">
+      <div class="emp-card-head">
+        <div class="emp-avatar">${esc((r['ì´ë¦']||'?').slice(0,1))}</div>
+        <div><div class="emp-name">${esc(r['ì´ë¦']||'')}</div><div class="emp-role">${esc(r['ì§ìì§ë¬´']||'')}${r['ì§ìë§¤ì¥']?' Â· '+esc(r['ì§ìë§¤ì¥']):''}</div></div>
+        ${ten?`<div class="emp-tenure">${ten}</div>`:''}
+      </div>
+      ${r['ìì¬ì¼']?`<div class="emp-hire">ð ìì¬ ${r['ìì¬ì¼'].substring(0,10)}</div>`:''}
+      <div class="emp-detail"><div style="font-size:11px;color:#a0aec8">${r['ì°ë½ì²']?esc(r['ì°ë½ì²']):''}</div></div>
+    </div>`;
+  }).join('');
+}
+function toggleEmp(i){empOpenIdx=empOpenIdx===i?null:i;renderEmployees();}
+
+function renderPipeline(){
+  const rej=cnt('ë¶í©ê²©');
+  let h=PIPELINE.map((s,i)=>{
+    const m=SM[s],active=flt===s;
+    return (i?'<span class="pipe-arrow">âº</span>':'')+
+      `<div class="pipe${active?' active':''}" onclick="setFilter('${s}')">
+        <div class="pipe-dot" style="background:${m.dot}"></div>
+        <div class="pipe-info"><div class="pipe-name">${s}</div><div class="pipe-cnt">${cnt(s)}</div></div>
+      </div>`;
+  }).join('');
+  if(rej) h+=`<span class="pipe-arrow">Â·</span>
+    <div class="pipe${flt==='ë¶í©ê²©'?' active':''}" style="border-color:rgba(248,113,113,.25)" onclick="setFilter('ë¶í©ê²©')">
+      <div class="pipe-dot" style="background:#ef4444"></div>
+      <div class="pipe-info"><div class="pipe-name" style="color:#f87171">ë¶í©ê²©</div><div class="pipe-cnt" style="color:#f87171">${rej}</div></div>
+    </div>`;
+  document.getElementById('pipeline').innerHTML=h;
+}
+
+function renderFilters(){
+  const base=rows.filter(r=>r['ì§íìí']!=='ìµì¢í©ê²©');
+  let h=`<div class="chip${flt==='all'?' active':''}" onclick="setFilter('all')">ì ì²´ ${base.length}</div>`;
+  [...PIPELINE,'ë¶í©ê²©'].forEach(s=>{
+    if(!cnt(s)) return;
+    const m=SM[s];
+    h+=`<div class="chip${flt===s?' active':''}" onclick="setFilter('${s}')" style="${flt===s?`border-color:${m.dot};color:${m.color};background:${m.bg}`:`color:${m.color}`}">${s} ${cnt(s)}</div>`;
+  });
+  document.getElementById('filterRow').innerHTML=h;
+}
+
+function setFilter(f){flt=f;openIdx=null;renderPipeline();renderFilters();renderCards();}
+function toggleCard(i){openIdx=openIdx===i?null:i;renderCards();}
+
+function renderCards(){
+  const base=rows.filter(r=>r['ì§íìí']!=='ìµì¢í©ê²©');
+  const visible=flt==='all'?base:base.filter(r=>r['ì§íìí']===flt);
+  const grid=document.getElementById('grid'),empty=document.getElementById('emptyEl');
+  if(!visible.length){grid.innerHTML='';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=visible.map(row=>cardHTML(row,rows.indexOf(row))).join('');
+}
+
+function cardHTML(row,i){
+  const s=row['ì§íìí']||'ìë¥ì ì',m=SM[s]||SM['ìë¥ì ì'];
+  const name=row['ì´ë¦']||'ì´ë¦ ë¯¸ìë ¥';
+  const birth=row['ìëìì¼'],ageStr=birth?`${new Date().getFullYear()-parseInt(birth.substring(0,4))}ì¸`:'';
+  const intv=row['ë©´ì ì¼']?row['ë©´ì ì¼'].substring(0,10):'';
+  const score=row['íê°ì ì'],isOpen=openIdx===i,av=AV[i%AV.length];
+  return `<div class="card${isOpen?' open':''}" style="--sc:${m.dot}" onclick="toggleCard(${i})">
+    <div class="card-inner">
+      <div class="card-head">
+        <div class="avatar" style="background:${av}">${esc(name.slice(0,1))}</div>
+        <div><div class="card-name">${esc(name)}</div><div class="card-sub">${ageStr?ageStr+' Â· ':''}${esc(row['ì§ìì§ë¬´']||'')}</div></div>
+        <span class="badge" style="background:${m.bg};color:${m.color}">${esc(s)}</span>
+      </div>
+      <div class="info-list">
+        <div class="info-row"><span class="info-icon">ð</span>${esc(row['ì§ìë§¤ì¥']||'-')}</div>
+        ${intv?`<div class="info-row"><span class="info-icon">ð</span>ë©´ì  ${intv}</div>`:''}
+        ${row['ë©´ì ê´']?`<div class="info-row"><span class="info-icon">ð¤</span>${esc(row['ë©´ì ê´'])}</div>`:''}
+      </div>
+      <div class="card-foot">
+        ${score!=null?starsHTML(score):'<span style="color:#2d3148;font-size:11px">íê° ìì</span>'}
+        <span class="chevron">â¼</span>
+      </div>
+    </div>
+    <div class="detail">
+      <div class="detail-grid">
+        ${df('ì°ë½ì²',row['ì°ë½ì²'])}${df('ì´ë©ì¼',row['ì´ë©ì¼'])}
+        ${df('íë ¥',row['íë ¥'])}${df('ìê²©ì¦',row['ìê²©ì¦']||'')}
+        ${intv?df('ë©´ì ì¼',intv):''}
+        ${df('ê²½ë ¥ ìì½',row['ê²½ë ¥ì´ë ¥ììì½'],true)}
+        ${df('ê°ì ',row['ê°ì '],true)}${df('ì°ë ¤ì¬í­',row['ì°ë ¤ì¬í­ê°ì ìì¸'],true)}
+      </div>
+      ${row['url']?`<a class="notion-btn" href="${row['url']}" target="_blank">ð ë¸ììì ë³´ê¸°</a>`:''}
+      <div class="action-row" style="margin-top:10px;opacity:.5">
+        <button class="act-btn" style="background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.4);color:#4ade80">â» ìíë³ê²½ì ë¸ììì</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function df(l,v,w){return `<div class="df${w?' wide':''}"><label>${l}</label><p class="${v?'':'nil'}">${v?esc(v):'â'}</p></div>`;}
+function starsHTML(s){const f=Math.round(Math.min(s,10)/10*5);let h='<div class="stars">';for(let i=0;i<5;i++)h+=`<span class="star${i>=f?' off':''}">â</span>`;return h+`<span class="score-tag">${s}ì </span></div>`;}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function tenure(d){
+  const s=new Date(d.substring(0,10)),n=new Date();
+  let y=n.getFullYear()-s.getFullYear(),m=n.getMonth()-s.getMonth();
+  if(n.getDate()<s.getDate()) m--;
+  if(m<0){y--;m+=12;}
+  return y>0?`${y}ë ${m}ê°ì`:m>0?`${m}ê°ì`:'1ê°ì ë¯¸ë§';
+}
+
+loadData();
+</script>
+</body>
+</html>
