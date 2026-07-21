@@ -2,7 +2,7 @@ const https = require('https');
 const fs = require('fs');
 
 const DB_ID = '8887bdc6711744e78475aed069f808ca';
-const TOKEN = process.env.NOTION_TOKEN;
+const TOKEN = (process.env.NOTION_TOKEN || '').trim();
 
 if (!TOKEN) { console.error('NOTION_TOKEN missing'); process.exit(1); }
 
@@ -40,27 +40,27 @@ const req = https.request(opts, res => {
       const p = page.properties;
       return {
         id: page.id, url: page.url,
-        이름: g(p['이름'],'title'),
-        연락처: g(p['연락처'],'phone_number'),
-        이메일: g(p['이메일'],'email'),
-        지원직무: g(p['지원직무'],'select'),
-        지원매장: g(p['지원매장'],'rich_text'),
-        학력: g(p['학력'],'rich_text'),
-        진행상태: g(p['진행상태'],'select'),
-        면접관: g(p['면접관'],'rich_text'),
-        평가점수: g(p['평가점수'],'number'),
-        강점: g(p['강점'],'rich_text'),
-        우려사항감점요인: g(p['우려사항감점요인'],'rich_text'),
-        경력이력서요약: g(p['경력이력서요약'],'rich_text'),
-        생년월일: g(p['생년월일'],'date'),
-        면접일: g(p['면접일'],'date'),
-        입사일: g(p['입사일'],'date'),
+        ì´ë¦: g(p['ì´ë¦'],'title'),
+        ì°ë½ì²: g(p['ì°ë½ì²'],'phone_number'),
+        ì´ë©ì¼: g(p['ì´ë©ì¼'],'email'),
+        ì§ìì§ë¬´: g(p['ì§ìì§ë¬´'],'select'),
+        ì§ìë§¤ì¥: g(p['ì§ìë§¤ì¥'],'rich_text'),
+        íë ¥: g(p['íë ¥'],'rich_text'),
+        ì§íìí: g(p['ì§íìí'],'select'),
+        ë©´ì ê´: g(p['ë©´ì ê´'],'rich_text'),
+        íê°ì ì: g(p['íê°ì ì'],'number'),
+        ê°ì : g(p['ê°ì '],'rich_text'),
+        ì°ë ¤ì¬í­ê°ì ìì¸: g(p['ì°ë ¤ì¬í­ê°ì ìì¸'],'rich_text'),
+        ê²½ë ¥ì´ë ¥ììì½: g(p['ê²½ë ¥ì´ë ¥ììì½'],'rich_text'),
+        ìëìì¼: g(p['ìëìì¼'],'date'),
+        ë©´ì ì¼: g(p['ë©´ì ì¼'],'date'),
+        ìì¬ì¼: g(p['ìì¬ì¼'],'date'),
         createdTime: page.created_time
       };
     }).sort((a,b)=> new Date(b.createdTime)-new Date(a.createdTime));
 
     fs.writeFileSync('data.json', JSON.stringify({ results, updated: new Date().toISOString() }, null, 2));
-    console.log('Saved ' + results.length + ' records');
+    console.log(`â Saved ${results.length} records`);
   });
 });
 req.on('error', e => { console.error(e); process.exit(1); });
