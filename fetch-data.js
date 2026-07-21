@@ -2,7 +2,7 @@ const https = require('https');
 const fs = require('fs');
 
 const DB_ID = '8887bdc6711744e78475aed069f808ca';
-const TOKEN = (process.env.NOTION_TOKEN || '').trim();
+const TOKEN = (process.env.NOTION_TOKEN || '').replace(/[^\x21-\x7E]/g, '');
 
 if (!TOKEN) { console.error('NOTION_TOKEN missing'); process.exit(1); }
 
