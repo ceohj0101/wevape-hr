@@ -40,27 +40,27 @@ const req = https.request(opts, res => {
       const p = page.properties;
       return {
         id: page.id, url: page.url,
-        ì´ë¦: g(p['ì´ë¦'],'title'),
-        ì°ë½ì²: g(p['ì°ë½ì²'],'phone_number'),
-        ì´ë©ì¼: g(p['ì´ë©ì¼'],'email'),
-        ì§ìì§ë¬´: g(p['ì§ìì§ë¬´'],'select'),
-        ì§ìë§¤ì¥: g(p['ì§ìë§¤ì¥'],'rich_text'),
-        íë ¥: g(p['íë ¥'],'rich_text'),
-        ì§íìí: g(p['ì§íìí'],'select'),
-        ë©´ì ê´: g(p['ë©´ì ê´'],'rich_text'),
-        íê°ì ì: g(p['íê°ì ì'],'number'),
-        ê°ì : g(p['ê°ì '],'rich_text'),
-        ì°ë ¤ì¬í­ê°ì ìì¸: g(p['ì°ë ¤ì¬í­ê°ì ìì¸'],'rich_text'),
-        ê²½ë ¥ì´ë ¥ììì½: g(p['ê²½ë ¥ì´ë ¥ììì½'],'rich_text'),
-        ìëìì¼: g(p['ìëìì¼'],'date'),
-        ë©´ì ì¼: g(p['ë©´ì ì¼'],'date'),
-        ìì¬ì¼: g(p['ìì¬ì¼'],'date'),
+        '\uc774\ub984': g(p['\uc774\ub984'],'title'),
+        '\uc5f0\ub77d\ucc98': g(p['\uc5f0\ub77d\ucc98'],'phone_number'),
+        '\uc774\uba54\uc77c': g(p['\uc774\uba54\uc77c'],'email'),
+        '\uc9c0\uc6d0\uc9c1\ubb34': g(p['\uc9c0\uc6d0\uc9c1\ubb34'],'select'),
+        '\uc9c0\uc6d0\ub9e4\uc7a5': g(p['\uc9c0\uc6d0\ub9e4\uc7a5'],'rich_text'),
+        '\ud559\ub825': g(p['\ud559\ub825'],'rich_text'),
+        '\uc9c4\ud589\uc0c1\ud0dc': g(p['\uc9c4\ud589\uc0c1\ud0dc'],'select'),
+        '\uba74\uc811\uad00': g(p['\uba74\uc811\uad00'],'rich_text'),
+        '\ud3c9\uac00\uc810\uc218': g(p['\ud3c9\uac00\uc810\uc218'],'number'),
+        '\uac15\uc810': g(p['\uac15\uc810'],'rich_text'),
+        '\uc6b0\ub824\uc0ac\ud56d\uac10\uc810\uc694\uc778': g(p['\uc6b0\ub824\uc0ac\ud56d\uac10\uc810\uc694\uc778'],'rich_text'),
+        '\uacbd\ub825\uc774\ub825\uc11c\uc694\uc57d': g(p['\uacbd\ub825\uc774\ub825\uc11c\uc694\uc57d'],'rich_text'),
+        '\uc0dd\ub144\uc6d4\uc77c': g(p['\uc0dd\ub144\uc6d4\uc77c'],'date'),
+        '\uba74\uc811\uc77c': g(p['\uba74\uc811\uc77c'],'date'),
+        '\uc785\uc0ac\uc77c': g(p['\uc785\uc0ac\uc77c'],'date'),
         createdTime: page.created_time
       };
     }).sort((a,b)=> new Date(b.createdTime)-new Date(a.createdTime));
 
     fs.writeFileSync('data.json', JSON.stringify({ results, updated: new Date().toISOString() }, null, 2));
-    console.log(`â Saved ${results.length} records`);
+    console.log(`Saved ${results.length} records`);
   });
 });
 req.on('error', e => { console.error(e); process.exit(1); });
