@@ -8,90 +8,128 @@
   :root{--bg:#0d0f1a;--bg2:#161929;--bg3:#1e2236;--border:rgba(255,255,255,.08);--text:#e8eaf2;--muted:#6b7799;--accent:#5b7ff5;--accent2:#7c6af5}
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-  .hero{background:linear-gradient(160deg,#0a0c18 0%,#111529 50%,#0f1a2e 100%);border-bottom:1px solid var(--border);padding:28px 24px 24px;position:relative;overflow:hidden}
+  .hero{background:linear-gradient(160deg,#0a0c18 0%,#111529 50%,#0f1a2e 100%);border-bottom:1px solid var(--border);padding:24px 24px 20px;position:relative;overflow:hidden}
   .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(91,127,245,.12) 0%,transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(124,106,245,.08) 0%,transparent 50%);pointer-events:none}
-  .hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:20px;position:relative}
-  .hero-logo{height:40px;object-fit:contain;filter:brightness(1.15) drop-shadow(0 0 8px rgba(91,127,245,.4))}
+  .hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;position:relative}
+  .hero-logo{height:38px;object-fit:contain;filter:brightness(1.15) drop-shadow(0 0 8px rgba(91,127,245,.4))}
   .hero-logo-text{font-size:22px;font-weight:900;letter-spacing:.12em;color:#fff;display:none}.hero-logo-text span{color:var(--accent)}
-  .hero-region{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
-  .hero-title{font-size:22px;font-weight:900;color:var(--text);letter-spacing:-.5px}
-  .hero-sub{font-size:12px;color:var(--muted);margin-top:6px}
+  .hero-region{font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+  .hero-title{font-size:20px;font-weight:900;color:var(--text);letter-spacing:-.5px}
+  .hero-sub{font-size:12px;color:var(--muted);margin-top:5px}
   .header-right{display:flex;align-items:center;gap:10px;position:relative}
   .update-time{font-size:11px;color:var(--muted)}
-  .reload-btn{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
+  .reload-btn{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 13px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
   .reload-btn:hover{background:rgba(255,255,255,.12)}.reload-btn:disabled{opacity:.4;cursor:not-allowed}
-  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;padding:20px 24px 0}
-  .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
-  .stat-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
-  .stat-num{font-size:32px;font-weight:900;line-height:1;color:var(--text)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;padding:18px 24px 0}
+  .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+  .stat-label{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+  .stat-num{font-size:28px;font-weight:900;line-height:1;color:var(--text)}
+  .stat-sub{font-size:9px;color:var(--muted);margin-top:3px}
   .stat-card.accent{border-color:rgba(91,127,245,.35);background:rgba(91,127,245,.08)}.stat-card.accent .stat-num{color:#7ba4ff}
   .stat-card.green{border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.06)}.stat-card.green .stat-num{color:#4ade80}
   .stat-card.red{border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.06)}.stat-card.red .stat-num{color:#f87171}
-  .emp-section{padding:20px 24px 0}
-  .section-hd{display:flex;align-items:center;gap:8px;margin-bottom:12px}
-  .section-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0;box-shadow:0 0 6px #4ade80}
-  .section-title{font-size:13px;font-weight:800;color:#4ade80}
-  .section-cnt{font-size:11px;color:var(--muted);background:var(--bg3);padding:2px 9px;border-radius:20px;border:1px solid var(--border);margin-left:4px}
-  .emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-  .emp-card{background:rgba(34,197,94,.06);border:1px solid rgba(74,222,128,.2);border-radius:14px;padding:14px 16px;cursor:pointer;transition:border-color .15s;border-left:3px solid #22c55e;overflow:hidden}
-  .emp-card:hover{border-color:rgba(74,222,128,.45)}.emp-card.open{border-color:rgba(74,222,128,.45)}
-  .emp-card-head{display:flex;align-items:center;gap:10px}
-  .emp-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0;background:#22c55e}
-  .emp-name{font-size:14px;font-weight:800;color:var(--text)}.emp-role{font-size:10px;color:var(--muted);margin-top:2px}
-  .emp-tenure{margin-left:auto;font-size:10px;font-weight:700;color:#4ade80;background:rgba(74,222,128,.13);padding:3px 8px;border-radius:10px;white-space:nowrap}
-  .emp-hire{font-size:10px;color:#4ade80;margin-top:8px}
-  .emp-detail{display:none;padding-top:10px;border-top:1px solid rgba(74,222,128,.15);margin-top:10px}
-  .emp-card.open .emp-detail{display:block}
-  .divider{height:1px;background:var(--border);margin:20px 24px 0}
-  .pipeline-wrap{padding:20px 24px 0}
+  .stat-card.purple{border-color:rgba(168,85,247,.3);background:rgba(168,85,247,.06)}.stat-card.purple .stat-num{color:#c084fc}
+  .monthly-wrap{padding:18px 24px 0}
+  .monthly-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .monthly-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+  .period-picker{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+  .period-picker input[type=month]{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:6px;padding:4px 8px;font-size:11px;outline:none;cursor:pointer}
+  .period-picker input[type=month]:focus{border-color:var(--accent)}
+  .monthly-table{overflow-x:auto;scrollbar-width:none}.monthly-table::-webkit-scrollbar{display:none}
+  .monthly-tbl{width:100%;border-collapse:collapse;font-size:11px}
+  .monthly-tbl th{color:var(--muted);font-weight:700;text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
+  .monthly-tbl td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text)}
+  .monthly-tbl tr:last-child td{border-bottom:none}
+  .monthly-tbl tr:hover td{background:rgba(255,255,255,.03)}
+  .m-ym{font-weight:700;color:var(--accent)}
+  .m-val{font-size:13px;font-weight:800}
+  .m-mini{height:4px;border-radius:2px;display:inline-block;margin-left:5px;vertical-align:middle;min-width:2px;max-width:60px}
+  .m-empty{color:var(--muted)}
+  .pipeline-wrap{padding:18px 24px 0}
   .pipeline-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
   .pipeline{display:flex;align-items:center;gap:0;overflow-x:auto;scrollbar-width:none}.pipeline::-webkit-scrollbar{display:none}
-  .pipe{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 15px;cursor:pointer;flex-shrink:0;transition:all .15s;min-width:80px}
+  .pipe{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 13px;cursor:pointer;flex-shrink:0;transition:all .15s;min-width:72px}
   .pipe:hover{border-color:rgba(255,255,255,.2)}.pipe.active{border-color:var(--accent);background:rgba(91,127,245,.1)}
-  .pipe-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-  .pipe-info .pipe-name{font-size:10px;font-weight:700;color:var(--muted)}.pipe-info .pipe-cnt{font-size:18px;font-weight:900;color:var(--text);line-height:1.1}
-  .pipe-arrow{color:var(--muted);font-size:12px;margin:0 4px;flex-shrink:0}
-  .content{padding:20px 24px}
-  .filter-row{display:flex;gap:7px;margin-bottom:18px;overflow-x:auto;scrollbar-width:none}.filter-row::-webkit-scrollbar{display:none}
-  .chip{padding:5px 13px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;border:1.5px solid transparent;transition:border-color .15s;background:var(--bg3);color:var(--muted)}
+  .pipe-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .pipe-name{font-size:10px;font-weight:700;color:var(--muted)}.pipe-cnt{font-size:16px;font-weight:900;color:var(--text);line-height:1.1}
+  .pipe-arrow{color:var(--muted);font-size:11px;margin:0 3px;flex-shrink:0}
+  .content{padding:16px 24px}
+  .filter-row{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}.filter-row::-webkit-scrollbar{display:none}
+  .chip{padding:4px 11px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;border:1.5px solid transparent;transition:all .15s;background:var(--bg3);color:var(--muted)}
   .chip:hover{color:var(--text)}.chip.active{color:var(--text);border-color:var(--accent);background:rgba(91,127,245,.12)}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:12px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
   .card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;cursor:pointer;transition:border-color .15s,transform .15s;overflow:hidden;border-left:4px solid var(--sc)}
   .card:hover{border-color:rgba(255,255,255,.15);transform:translateY(-1px)}.card.open{border-color:rgba(255,255,255,.18)}
-  .card-inner{padding:16px}
-  .card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-  .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
-  .card-name{font-size:15px;font-weight:800;color:var(--text)}.card-sub{font-size:11px;color:var(--muted);margin-top:2px}
-  .badge{margin-left:auto;display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;white-space:nowrap;flex-shrink:0}
+  .card-inner{padding:14px}
+  .card-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;flex-shrink:0}
+  .card-name{font-size:14px;font-weight:800;color:var(--text)}.card-sub{font-size:10px;color:var(--muted);margin-top:2px}
+  .badge{margin-left:auto;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:800;white-space:nowrap;flex-shrink:0}
   .badge::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
-  .info-list{display:flex;flex-direction:column;gap:5px}
-  .info-row{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
+  .action-btns{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+  .act-btn{padding:5px 10px;border-radius:7px;border:1px solid;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.02em}
+  .act-btn:hover{opacity:.85;transform:translateY(-1px)}.act-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+  .act-btn.green{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.1);color:#4ade80}
+  .act-btn.red{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.1);color:#f87171}
+  .act-btn.blue{border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.1);color:#7ba4ff}
+  .act-btn.yellow{border-color:rgba(245,158,11,.4);background:rgba(245,158,11,.1);color:#fbbf24}
+  .act-btn.gray{border-color:rgba(100,116,139,.4);background:rgba(100,116,139,.1);color:#94a3b8}
+  .act-btn.purple{border-color:rgba(168,85,247,.4);background:rgba(168,85,247,.1);color:#c084fc}
+  .info-list{display:flex;flex-direction:column;gap:4px}
+  .info-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
   .info-icon{width:14px;text-align:center;flex-shrink:0;font-size:11px}
-  .card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:11px;border-top:1px solid var(--border)}
+  .card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
   .stars{display:flex;align-items:center;gap:1px}.star{font-size:12px;color:#fbbf24}.star.off{color:#2d3148}
   .score-tag{font-size:10px;color:var(--muted);margin-left:4px}
   .chevron{font-size:10px;color:var(--muted);transition:transform .2s}.card.open .chevron{transform:rotate(180deg)}
-  .detail{display:none;padding:14px 16px 16px;background:rgba(0,0,0,.2);border-top:1px solid var(--border)}
+  .detail{display:none;padding:12px 14px 14px;background:rgba(0,0,0,.2);border-top:1px solid var(--border)}
   .card.open .detail{display:block}
-  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .df label{font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;display:block;margin-bottom:3px}
   .df p{font-size:11px;color:#a0aec8;line-height:1.5;white-space:pre-wrap;word-break:break-word}.df p.nil{color:#2d3148}
   .df.wide{grid-column:span 2}
-  .notion-btn{display:inline-flex;align-items:center;gap:5px;margin-top:12px;padding:6px 12px;background:rgba(91,127,245,.15);border-radius:7px;border:1px solid rgba(91,127,245,.3);font-size:11px;color:#7ba4ff;font-weight:700;text-decoration:none}
+  .notion-btn{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:5px 11px;background:rgba(91,127,245,.15);border-radius:7px;border:1px solid rgba(91,127,245,.3);font-size:11px;color:#7ba4ff;font-weight:700;text-decoration:none}
   .notion-btn:hover{background:rgba(91,127,245,.25)}
-  .action-row{display:flex;gap:8px;margin-top:12px}
-  .act-btn{flex:1;padding:8px 0;border-radius:8px;border:1px solid;font-size:12px;font-weight:800;cursor:not-allowed;opacity:.5;letter-spacing:.03em}
-  .loading{text-align:center;padding:64px}
-  .spinner{display:inline-block;width:28px;height:28px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+  .divider{height:1px;background:var(--border);margin:20px 24px 0}
+  .section-wrap{padding:18px 24px 0}
+  .section-hd{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .section-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;box-shadow:0 0 6px currentColor}
+  .section-title{font-size:13px;font-weight:800}
+  .section-cnt{font-size:11px;color:var(--muted);background:var(--bg3);padding:2px 8px;border-radius:20px;border:1px solid var(--border);margin-left:4px}
+  .section-live{font-size:10px;color:var(--muted);margin-left:auto;display:flex;align-items:center;gap:4px}
+  .live-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  .emp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+  .emp-card{background:rgba(34,197,94,.05);border:1px solid rgba(74,222,128,.18);border-radius:14px;padding:13px 15px;cursor:pointer;transition:border-color .15s;border-left:3px solid #22c55e;overflow:hidden}
+  .emp-card:hover{border-color:rgba(74,222,128,.4)}.emp-card.open{border-color:rgba(74,222,128,.4)}
+  .emp-card-head{display:flex;align-items:center;gap:10px}
+  .emp-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0;background:#22c55e}
+  .emp-info{flex:1;min-width:0}
+  .emp-name{font-size:14px;font-weight:800;color:var(--text)}
+  .emp-age{font-size:10px;color:var(--muted);margin-top:1px}
+  .emp-tenure-badge{margin-left:auto;font-size:10px;font-weight:700;color:#4ade80;background:rgba(74,222,128,.13);padding:3px 8px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+  .emp-hire{font-size:10px;color:rgba(74,222,128,.6);margin-top:7px}
+  .emp-detail{display:none;padding-top:10px;border-top:1px solid rgba(74,222,128,.15);margin-top:10px;font-size:11px;color:#a0aec8;line-height:1.6}
+  .emp-card.open .emp-detail{display:block}
+  .exit-card{background:rgba(100,116,139,.05);border:1px solid rgba(100,116,139,.2);border-radius:14px;padding:13px 15px;cursor:pointer;transition:border-color .15s;border-left:3px solid #64748b;overflow:hidden}
+  .exit-card:hover{border-color:rgba(100,116,139,.4)}.exit-card.open{border-color:rgba(100,116,139,.4)}
+  .exit-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0;background:#475569}
+  .exit-tenure-badge{margin-left:auto;font-size:10px;font-weight:700;color:#94a3b8;background:rgba(100,116,139,.15);padding:3px 8px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+  .exit-date{font-size:10px;color:rgba(100,116,139,.7);margin-top:7px}
+  .loading{text-align:center;padding:60px}.spinner{display:inline-block;width:26px;height:26px;border:3px solid rgba(255,255,255,.1);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
-  .loading p{margin-top:14px;font-size:13px;color:var(--muted)}
-  .empty{text-align:center;padding:60px;color:var(--muted);font-size:13px}
-  .empty-icon{font-size:36px;margin-bottom:10px}
-  .error-box{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:10px;padding:14px 16px;color:#f87171;font-size:12px;line-height:1.6;margin-bottom:16px}
-  .footer{text-align:center;padding:24px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);margin-top:20px}
+  .loading p{margin-top:12px;font-size:12px;color:var(--muted)}
+  .empty{text-align:center;padding:48px;color:var(--muted);font-size:12px}
+  .empty-icon{font-size:32px;margin-bottom:10px}
+  .error-box{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:10px;padding:12px 15px;color:#f87171;font-size:12px;line-height:1.6;margin-bottom:14px}
+  .footer{text-align:center;padding:22px;font-size:10px;color:var(--muted);border-top:1px solid var(--border);margin-top:22px}
+  .toast{position:fixed;bottom:24px;right:24px;background:#1e2236;border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--text);box-shadow:0 4px 20px rgba(0,0,0,.4);z-index:999;animation:slideup .2s ease;display:none}
+  .toast.show{display:block}.toast.ok{border-color:rgba(34,197,94,.4);color:#4ade80}.toast.err{border-color:rgba(248,113,113,.4);color:#f87171}
+  @keyframes slideup{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
 </style>
 </head>
 <body>
+
 <div class="hero">
   <div class="hero-top">
     <div>
@@ -105,43 +143,121 @@
     </div>
   </div>
   <div>
-    <div class="hero-region">인천 · 경기 지점</div>
+    <div class="hero-region">위베이프 · 상동점 채용 관리</div>
     <div class="hero-title">신입 면접 관리</div>
-    <div class="hero-sub">지원자 현황 및 채용 파이프라인</div>
+    <div class="hero-sub">면접부터 채용까지 한눈에 관리 · 노션 자동 연동</div>
   </div>
 </div>
 
 <div class="stats" id="stats"></div>
-<div class="emp-section" id="empSection" style="display:none">
-  <div class="section-hd"><div class="section-dot"></div><span class="section-title">재직중 직원</span><span class="section-cnt" id="empCnt">0명</span></div>
-  <div class="emp-grid" id="empGrid"></div>
+
+<div class="monthly-wrap" id="monthlyWrap" style="display:none">
+  <div class="monthly-hd">
+    <div class="monthly-title">📊 월별 채용 현황</div>
+    <div class="period-picker">
+      <input type="month" id="fromMonth"> ~ <input type="month" id="toMonth">
+    </div>
+  </div>
+  <div class="monthly-table">
+    <table class="monthly-tbl">
+      <thead><tr>
+        <th>월</th><th>총 지원</th><th>면접 진행</th><th>불참</th><th>무응답</th><th>합격</th><th>불합격</th>
+      </tr></thead>
+      <tbody id="monthlyBody"></tbody>
+    </table>
+  </div>
 </div>
-<div class="divider" id="empDivider" style="display:none"></div>
-<div class="pipeline-wrap"><div class="pipeline-title">채용 파이프라인</div><div class="pipeline" id="pipeline"></div></div>
+
+<div class="pipeline-wrap">
+  <div class="pipeline-title">채용 파이프라인</div>
+  <div class="pipeline" id="pipeline"></div>
+</div>
+
 <div class="content">
-  <div class="loading" id="loadingEl"><div class="spinner"></div><p>데이터 불러오는 중...</p></div>
+  <div id="loadingEl" class="loading"><div class="spinner"></div><p>노션 데이터 불러오는 중...</p></div>
   <div id="mainContent" style="display:none">
     <div id="errorBox" style="display:none"></div>
     <div class="filter-row" id="filterRow"></div>
     <div class="grid" id="grid"></div>
-    <div class="empty" id="emptyEl" style="display:none"><div class="empty-icon">🔍</div>해당 조건의 지원자가 없어요.</div>
+    <div class="empty" id="emptyEl" style="display:none"><div class="empty-icon">📋</div>해당하는 지원자가 없습니다.</div>
   </div>
 </div>
-<div class="footer">We Vape — 신입 면접 관리 내부 운영 자료 · <a href="https://app.notion.com/p/8887bdc6711744e78475aed069f808ca" style="color:var(--accent);text-decoration:none">노션 원본</a></div>
+
+<div class="divider" id="empDivider" style="display:none"></div>
+<div class="section-wrap" id="empSection" style="display:none">
+  <div class="section-hd">
+    <div class="section-dot" style="color:#4ade80;background:#4ade80"></div>
+    <span class="section-title" style="color:#4ade80">재직중 직원</span>
+    <span class="section-cnt" id="empCnt">0명</span>
+    <span class="section-live"><span class="live-dot"></span>근속년수 실시간</span>
+  </div>
+  <div class="emp-grid" id="empGrid"></div>
+</div>
+
+<div class="divider" id="exitDivider" style="display:none"></div>
+<div class="section-wrap" id="exitSection" style="display:none">
+  <div class="section-hd">
+    <div class="section-dot" style="color:#64748b;background:#64748b"></div>
+    <span class="section-title" style="color:#94a3b8">퇴사자</span>
+    <span class="section-cnt" id="exitCnt">0명</span>
+  </div>
+  <div class="emp-grid" id="exitGrid"></div>
+</div>
+
+<div class="footer">We Vape — 신입 면접 관리 · <a href="https://app.notion.com/p/8887bdc6711744e78475aed069f808ca" style="color:var(--accent);text-decoration:none">노션 DB 열기</a></div>
+<div class="toast" id="toast"></div>
 
 <script>
+const WORKER='https://wevape-notion.ceohj01.workers.dev/';
 const SM={
   '서류접수':{color:'#64748b',bg:'rgba(100,116,139,.18)',dot:'#64748b'},
-  '서류합격':{color:'#60a5fa',bg:'rgba(96,165,250,.15)',dot:'#3b82f6'},
+  '서류합격/연락중':{color:'#60a5fa',bg:'rgba(96,165,250,.15)',dot:'#3b82f6'},
   '면접대기':{color:'#fbbf24',bg:'rgba(251,191,36,.13)',dot:'#f59e0b'},
   '면접예정':{color:'#c084fc',bg:'rgba(192,132,252,.15)',dot:'#a855f7'},
   '면접완료':{color:'#fb923c',bg:'rgba(251,146,60,.13)',dot:'#f97316'},
   '최종합격':{color:'#4ade80',bg:'rgba(74,222,128,.13)',dot:'#22c55e'},
+  '합격':{color:'#4ade80',bg:'rgba(74,222,128,.13)',dot:'#22c55e'},
   '불합격':{color:'#f87171',bg:'rgba(248,113,113,.13)',dot:'#ef4444'},
+  '불참':{color:'#f87171',bg:'rgba(248,113,113,.13)',dot:'#ef4444'},
+  '문자남겨놓음':{color:'#fbbf24',bg:'rgba(251,191,36,.13)',dot:'#f59e0b'},
+  '콜백없음':{color:'#94a3b8',bg:'rgba(100,116,139,.15)',dot:'#64748b'},
+  '퇴사':{color:'#94a3b8',bg:'rgba(100,116,139,.15)',dot:'#64748b'},
 };
-const PIPELINE=['서류접수','서류합격','면접대기','면접예정','면접완료'];
-const AV=['#6366f1','#8b5cf6','#ec4899','#0ea5e9','#f97316','#22c55e','#a855f7','#14b8a6','#f59e0b'];
-let rows=[],flt='all',openIdx=null,empOpenIdx=null;
+const FSM={color:'#6b7799',bg:'rgba(107,119,153,.15)',dot:'#6b7799'};
+const PIPELINE=['서류접수','서류합격/연락중','면접예정','면접완료'];
+const STAGE_ACTIONS={
+  '서류접수':[{label:'📞 연락완료',next:'서류합격/연락중',cls:'blue'},{label:'💬 문자남겨놓음',next:'문자남겨놓음',cls:'yellow'},{label:'📵 콜백없음',next:'콜백없음',cls:'gray'}],
+  '서류합격/연락중':[{label:'📅 면접 확정',next:'면접예정',cls:'purple'},{label:'💬 문자남겨놓음',next:'문자남겨놓음',cls:'yellow'},{label:'📵 콜백없음',next:'콜백없음',cls:'gray'}],
+  '면접대기':[{label:'✅ 면접완료',next:'면접완료',cls:'green'},{label:'❌ 불참',next:'불참',cls:'red'}],
+  '면접예정':[{label:'✅ 면접완료',next:'면접완료',cls:'green'},{label:'❌ 불참',next:'불참',cls:'red'}],
+  '면접완료':[{label:'🎉 합격',next:'최종합격',cls:'green'},{label:'✗ 불합격',next:'불합격',cls:'red'}],
+  '문자남겨놓음':[{label:'📞 다시연락',next:'서류합격/연락중',cls:'blue'},{label:'📵 콜백없음',next:'콜백없음',cls:'gray'}],
+  '콜백없음':[{label:'📞 다시연락',next:'서류합격/연락중',cls:'blue'}],
+};
+const AV=['#6366f1','#8b5cf6','#ec4899','#0ea5e9','#f97316','#a855f7','#14b8a6','#f59e0b','#3b82f6'];
+let rows=[],flt='면접예정',openIdx=null,empOpenIdx=null,exitOpenIdx=null;
+
+function toast(msg,type='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show '+type;
+  clearTimeout(t._tm);t._tm=setTimeout(()=>t.className='toast',2500);
+}
+
+async function updateStatus(pageId,status,btnEl){
+  if(!pageId){toast('ID 없음','err');return;}
+  if(btnEl){btnEl.disabled=true;btnEl.textContent='⏳';}
+  try{
+    const r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageId,status})});
+    const d=await r.json();
+    if(!r.ok||d.error) throw new Error(d.error||'Error');
+    toast('✓ '+status+' 처리 완료');
+    openIdx=null;
+    await loadData();
+  }catch(e){
+    toast('오류: '+e.message,'err');
+    if(btnEl){btnEl.disabled=false;btnEl.textContent='재시도';}
+  }
+}
 
 async function loadData(){
   const btn=document.getElementById('reloadBtn');
@@ -151,7 +267,7 @@ async function loadData(){
   document.getElementById('stats').innerHTML='';
   document.getElementById('pipeline').innerHTML='';
   try{
-    const r=await fetch('https://wevape-notion.ceohj01.workers.dev/?_='+Date.now());
+    const r=await fetch(WORKER+'?_='+Date.now());
     if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json();
     rows=d.records||d.results||[];
@@ -167,66 +283,55 @@ async function loadData(){
   btn.disabled=false;btn.textContent='↻ 새로고침';
   document.getElementById('loadingEl').style.display='none';
   document.getElementById('mainContent').style.display='block';
-  renderStats();renderEmployees();renderPipeline();renderFilters();renderCards();
+  renderAll();
 }
 
+function renderAll(){renderStats();renderPipeline();renderFilters();renderCards();renderEmployees();renderFormerEmployees();renderMonthly();}
 const cnt=s=>rows.filter(r=>r['진행상태']===s).length;
 
 function renderStats(){
-  const inP=cnt('서류접수')+cnt('서류합격')+cnt('면접대기')+cnt('면접예정')+cnt('면접완료');
-  document.getElementById('stats').innerHTML=`
-    <div class="stat-card"><div class="stat-label">전체 지원자</div><div class="stat-num">${rows.length}</div></div>
-    <div class="stat-card accent"><div class="stat-label">진행 중</div><div class="stat-num">${inP}</div></div>
-    <div class="stat-card green"><div class="stat-label">재직중</div><div class="stat-num">${cnt('최종합격')}</div></div>
-    <div class="stat-card red"><div class="stat-label">불합격</div><div class="stat-num">${cnt('불합격')}</div></div>`;
+  const thisMonth=new Date().toISOString().substring(0,7);
+  const thisMonthPending=rows.filter(r=>{
+    const ym=(r.createdAt||'').substring(0,7);
+    const s=r['진행상태'];
+    return ym===thisMonth&&s!=='최종합격'&&s!=='퇴사';
+  }).length;
+  const inP=PIPELINE.reduce((a,s)=>a+cnt(s),0);
+  const emps=cnt('최종합격'),exits=cnt('퇴사');
+  const neg=['불합격','불참','문자남겨놓음','콜백없음'].reduce((a,s)=>a+cnt(s),0);
+  let h=`<div class="stat-card accent"><div class="stat-label">이번달 신규</div><div class="stat-num">${thisMonthPending}</div><div class="stat-sub">면접예정+서류접수</div></div>
+    <div class="stat-card"><div class="stat-label">파이프라인</div><div class="stat-num">${inP}</div><div class="stat-sub">진행 중</div></div>
+    <div class="stat-card green"><div class="stat-label">재직중</div><div class="stat-num">${emps}</div></div>`;
+  if(neg) h+=`<div class="stat-card red"><div class="stat-label">불합격/무응답</div><div class="stat-num">${neg}</div></div>`;
+  if(exits) h+=`<div class="stat-card purple"><div class="stat-label">퇴사</div><div class="stat-num">${exits}</div></div>`;
+  document.getElementById('stats').innerHTML=h;
 }
-
-function renderEmployees(){
-  const emps=rows.filter(r=>r['진행상태']==='최종합격');
-  const sec=document.getElementById('empSection'),div=document.getElementById('empDivider');
-  if(!emps.length){sec.style.display='none';div.style.display='none';return;}
-  sec.style.display='block';div.style.display='block';
-  document.getElementById('empCnt').textContent=emps.length+'명';
-  document.getElementById('empGrid').innerHTML=emps.map((r,i)=>{
-    const ten=r['입사일']?tenure(r['입사일']):'';
-    const isOpen=empOpenIdx===i;
-    return `<div class="emp-card${isOpen?' open':''}" onclick="toggleEmp(${i})">
-      <div class="emp-card-head">
-        <div class="emp-avatar">${esc((r['이름']||'?').slice(0,1))}</div>
-        <div><div class="emp-name">${esc(r['이름']||'')}</div><div class="emp-role">${esc(r['지원직무']||'')}${r['지원매장']?' · '+esc(r['지원매장']):''}</div></div>
-        ${ten?`<div class="emp-tenure">${ten}</div>`:''}
-      </div>
-      ${r['입사일']?`<div class="emp-hire">���� 입사 ${r['입사일'].substring(0,10)}</div>`:''}
-      <div class="emp-detail"><div style="font-size:11px;color:#a0aec8">${r['연락처']?esc(r['연락처']):''}</div></div>
-    </div>`;
-  }).join('');
-}
-function toggleEmp(i){empOpenIdx=empOpenIdx===i?null:i;renderEmployees();}
 
 function renderPipeline(){
-  const rej=cnt('불합격');
+  const neg=['불합격','불참','문자남겨놓음','콜백없음'].reduce((a,s)=>a+cnt(s),0);
   let h=PIPELINE.map((s,i)=>{
-    const m=SM[s],active=flt===s;
+    const m=SM[s]||FSM,active=flt===s;
     return (i?'<span class="pipe-arrow">›</span>':'')+
       `<div class="pipe${active?' active':''}" onclick="setFilter('${s}')">
         <div class="pipe-dot" style="background:${m.dot}"></div>
-        <div class="pipe-info"><div class="pipe-name">${s}</div><div class="pipe-cnt">${cnt(s)}</div></div>
+        <div><div class="pipe-name">${s}</div><div class="pipe-cnt">${cnt(s)}</div></div>
       </div>`;
   }).join('');
-  if(rej) h+=`<span class="pipe-arrow">·</span>
-    <div class="pipe${flt==='불합격'?' active':''}" style="border-color:rgba(248,113,113,.25)" onclick="setFilter('불합격')">
+  if(neg) h+=`<span class="pipe-arrow">·</span>
+    <div class="pipe${flt==='_neg'?' active':''}" style="border-color:rgba(248,113,113,.25)" onclick="setFilter('_neg')">
       <div class="pipe-dot" style="background:#ef4444"></div>
-      <div class="pipe-info"><div class="pipe-name" style="color:#f87171">불합격</div><div class="pipe-cnt" style="color:#f87171">${rej}</div></div>
+      <div><div class="pipe-name" style="color:#f87171">불합격/기타</div><div class="pipe-cnt" style="color:#f87171">${neg}</div></div>
     </div>`;
   document.getElementById('pipeline').innerHTML=h;
 }
 
 function renderFilters(){
-  const base=rows.filter(r=>r['진행상태']!=='최종합격');
+  const base=rows.filter(r=>r['진행상태']!=='최종합격'&&r['진행상태']!=='퇴사');
   let h=`<div class="chip${flt==='all'?' active':''}" onclick="setFilter('all')">전체 ${base.length}</div>`;
-  [...PIPELINE,'불합격'].forEach(s=>{
-    if(!cnt(s)) return;
-    const m=SM[s];
+  const shown=new Set(base.map(r=>r['진행상태']));
+  [...PIPELINE,'불합격','불참','문자남겨놓음','콜백없음'].forEach(s=>{
+    if(!shown.has(s)||!cnt(s)) return;
+    const m=SM[s]||FSM;
     h+=`<div class="chip${flt===s?' active':''}" onclick="setFilter('${s}')" style="${flt===s?`border-color:${m.dot};color:${m.color};background:${m.bg}`:`color:${m.color}`}">${s} ${cnt(s)}</div>`;
   });
   document.getElementById('filterRow').innerHTML=h;
@@ -236,8 +341,12 @@ function setFilter(f){flt=f;openIdx=null;renderPipeline();renderFilters();render
 function toggleCard(i){openIdx=openIdx===i?null:i;renderCards();}
 
 function renderCards(){
-  const base=rows.filter(r=>r['진행상태']!=='최종합격');
-  const visible=flt==='all'?base:base.filter(r=>r['진행상태']===flt);
+  const negS=['불합격','불참','문자남겨놓음','콜백없음'];
+  const base=rows.filter(r=>r['진행상태']!=='최종합격'&&r['진행상태']!=='퇴사');
+  let visible;
+  if(flt==='all') visible=base;
+  else if(flt==='_neg') visible=base.filter(r=>negS.includes(r['진행상태']));
+  else visible=base.filter(r=>r['진행상태']===flt);
   const grid=document.getElementById('grid'),empty=document.getElementById('emptyEl');
   if(!visible.length){grid.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
@@ -245,22 +354,27 @@ function renderCards(){
 }
 
 function cardHTML(row,i){
-  const s=row['진행상태']||'서류접수',m=SM[s]||SM['서류접수'];
-  const name=row['이름']||'이름 미입력';
+  const s=row['진행상태']||'서류접수',m=SM[s]||FSM;
+  const name=row['이름']||'이름 없음';
   const birth=row['생년월일'],ageStr=birth?`${new Date().getFullYear()-parseInt(birth.substring(0,4))}세`:'';
   const intv=row['면접일']?row['면접일'].substring(0,10):'';
   const score=row['평가점수'],isOpen=openIdx===i,av=AV[i%AV.length];
+  const actions=STAGE_ACTIONS[s]||[];
+  const pid=row['id']||'';
+  const actionBtns=actions.length?`<div class="action-btns">${actions.map(a=>`<button class="act-btn ${a.cls}" onclick="event.stopPropagation();updateStatus('${pid}','${a.next}',this)">${a.label}</button>`).join('')}</div>`:'';
   return `<div class="card${isOpen?' open':''}" style="--sc:${m.dot}" onclick="toggleCard(${i})">
     <div class="card-inner">
       <div class="card-head">
         <div class="avatar" style="background:${av}">${esc(name.slice(0,1))}</div>
-        <div><div class="card-name">${esc(name)}</div><div class="card-sub">${ageStr?ageStr+' · ':''}${esc(row['지원직무']||'')}</div></div>
+        <div><div class="card-name">${esc(name)}</div><div class="card-sub">${ageStr?ageStr+' · ':''}${esc(row['지원직무']||'-')}</div></div>
         <span class="badge" style="background:${m.bg};color:${m.color}">${esc(s)}</span>
       </div>
+      ${actionBtns}
       <div class="info-list">
         <div class="info-row"><span class="info-icon">📍</span>${esc(row['지원매장']||'-')}</div>
         ${intv?`<div class="info-row"><span class="info-icon">📅</span>면접 ${intv}</div>`:''}
         ${row['면접관']?`<div class="info-row"><span class="info-icon">👤</span>${esc(row['면접관'])}</div>`:''}
+        ${row['연락처']?`<div class="info-row"><span class="info-icon">📞</span>${esc(row['연락처'])}</div>`:''}
       </div>
       <div class="card-foot">
         ${score!=null?starsHTML(score):'<span style="color:#2d3148;font-size:11px">평가 없음</span>'}
@@ -269,32 +383,164 @@ function cardHTML(row,i){
     </div>
     <div class="detail">
       <div class="detail-grid">
-        ${df('연락처',row['연락처'])}${df('이메일',row['이메일'])}
-        ${df('학력',row['학력'])}${df('자격증',row['자격증']||'')}
-        ${intv?df('면접일',intv):''}
-        ${df('경력 요약',row['경력이력서요약'],true)}
-        ${df('강점',row['강점'],true)}${df('우려사항',row['우려사항감점요인'],true)}
+        ${df('학력',row['학력'])}${df('생년월일',birth)}
+        ${df('이메일',row['이메일'])}${df('면접일',intv)}
+        ${intv?df('면접관',row['면접관']):''}
+        ${df('강점',row['강점'],true)}
+        ${df('우려사항',row['우려사항감점요인'],true)}
+        ${df('경력요약',row['경력이력서요약'],true)}
       </div>
-      ${row['url']?`<a class="notion-btn" href="${row['url']}" target="_blank">📋 노션에서 보기</a>`:''}
-      <div class="action-row" style="margin-top:10px;opacity:.5">
-        <button class="act-btn" style="background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.4);color:#4ade80">※ 상태변경은 노션에서</button>
-      </div>
+      ${row['url']?`<a class="notion-btn" href="${row['url']}" target="_blank">📋 노션에서 열기</a>`:''}
     </div>
   </div>`;
 }
 
-function df(l,v,w){return `<div class="df${w?' wide':''}"><label>${l}</label><p class="${v?'':'nil'}">${v?esc(v):'—'}</p></div>`;}
+function renderEmployees(){
+  const emps=rows.filter(r=>r['진행상태']==='최종합격')
+    .sort((a,b)=>new Date(a['입사일']||'9999')-new Date(b['입사일']||'9999'));
+  const sec=document.getElementById('empSection'),div=document.getElementById('empDivider');
+  if(!emps.length){sec.style.display='none';div.style.display='none';return;}
+  sec.style.display='block';div.style.display='block';
+  document.getElementById('empCnt').textContent=emps.length+'명';
+  document.getElementById('empGrid').innerHTML=emps.map((r,i)=>{
+    const ten=r['입사일']?tenure(r['입사일']):'';
+    const hireStr=r['입사일']?r['입사일'].substring(0,7).replace('-','년 ')+'월':'';
+    const birth=r['생년월일'];
+    const age=birth?`${new Date().getFullYear()-parseInt(birth.substring(0,4))}세 (${birth.substring(0,4)}년생)`:'';
+    const isOpen=empOpenIdx===i;
+    return `<div class="emp-card${isOpen?' open':''}" onclick="toggleEmp(${i})">
+      <div class="emp-card-head">
+        <div class="emp-avatar">${esc((r['이름']||'?').slice(0,1))}</div>
+        <div class="emp-info">
+          <div class="emp-name">${esc(r['이름']||'')}</div>
+          ${age?`<div class="emp-age">${age}</div>`:''}
+        </div>
+        ${ten?`<div class="emp-tenure-badge">🏅 ${ten}</div>`:''}
+      </div>
+      ${hireStr?`<div class="emp-hire">📅 ${hireStr} 입사</div>`:''}
+      <div class="emp-detail">
+        ${r['지원직무']?`<div>🎯 ${esc(r['지원직무'])}</div>`:''}
+        ${r['지원매장']?`<div>📍 ${esc(r['지원매장'])}</div>`:''}
+        ${r['url']?`<div style="margin-top:6px"><a class="notion-btn" href="${r['url']}" target="_blank" style="font-size:10px;padding:4px 10px">📋 노션 열기</a></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleEmp(i){empOpenIdx=empOpenIdx===i?null:i;renderEmployees();}
+
+function renderFormerEmployees(){
+  const exits=rows.filter(r=>r['진행상태']==='퇴사')
+    .sort((a,b)=>new Date(b['면접일']||'0')-new Date(a['면접일']||'0'));
+  const sec=document.getElementById('exitSection'),div=document.getElementById('exitDivider');
+  if(!exits.length){sec.style.display='none';div.style.display='none';return;}
+  sec.style.display='block';div.style.display='block';
+  document.getElementById('exitCnt').textContent=exits.length+'명';
+  document.getElementById('exitGrid').innerHTML=exits.map((r,i)=>{
+    const exitDate=r['면접일']?r['면접일'].substring(0,10):'';
+    const ten=(r['입사일']&&exitDate)?tenureBetween(r['입사일'],exitDate):'';
+    const birth=r['생년월일'];
+    const age=birth?`${parseInt((exitDate||new Date().toISOString()).substring(0,4))-parseInt(birth.substring(0,4))}세`:'';
+    const isOpen=exitOpenIdx===i;
+    return `<div class="exit-card${isOpen?' open':''}" onclick="toggleExit(${i})">
+      <div class="emp-card-head">
+        <div class="exit-avatar">${esc((r['이름']||'?').slice(0,1))}</div>
+        <div class="emp-info">
+          <div class="emp-name" style="color:#cbd5e1">${esc(r['이름']||'')}</div>
+          ${age?`<div class="emp-age">${age}</div>`:''}
+        </div>
+        ${ten?`<div class="exit-tenure-badge">근속 ${ten}</div>`:''}
+      </div>
+      ${exitDate?`<div class="exit-date">🚪 퇴사 ${exitDate}${r['입사일']?' · 입사 '+r['입사일'].substring(0,7).replace('-','년 ')+'월':''}</div>`:''}
+      <div class="emp-detail">
+        ${r['우려사항감점요인']?`<div style="margin-top:4px;color:#94a3b8">${esc(r['우려사항감점요인'])}</div>`:''}
+        ${r['url']?`<div style="margin-top:6px"><a class="notion-btn" href="${r['url']}" target="_blank" style="font-size:10px;padding:4px 10px">📋 노션 열기</a></div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function toggleExit(i){exitOpenIdx=exitOpenIdx===i?null:i;renderFormerEmployees();}
+
+function renderMonthly(){
+  if(!rows.length){document.getElementById('monthlyWrap').style.display='none';return;}
+  document.getElementById('monthlyWrap').style.display='block';
+  const months=new Set();
+  rows.forEach(r=>{
+    if(r.createdAt) months.add(r.createdAt.substring(0,7));
+    if(r['면접일']) months.add(r['면접일'].substring(0,7));
+  });
+  months.add(new Date().toISOString().substring(0,7));
+  const sorted=[...months].sort();
+  const minYM=sorted[0]||'2026-01',maxYM=sorted[sorted.length-1];
+  const fromEl=document.getElementById('fromMonth'),toEl=document.getElementById('toMonth');
+  if(!fromEl._init){
+    fromEl._init=true;
+    fromEl.min=minYM;fromEl.max=maxYM;toEl.min=minYM;toEl.max=maxYM;
+    const d3=new Date();d3.setMonth(d3.getMonth()-2);
+    fromEl.value=d3.toISOString().substring(0,7);
+    toEl.value=maxYM;
+    fromEl.onchange=toEl.onchange=renderMonthlyTable;
+  }
+  renderMonthlyTable();
+}
+
+function renderMonthlyTable(){
+  const fromYM=document.getElementById('fromMonth').value;
+  const toYM=document.getElementById('toMonth').value;
+  if(!fromYM||!toYM) return;
+  const range=[];let cur=fromYM;
+  while(cur<=toYM){
+    range.push(cur);
+    const [y,m]=cur.split('-').map(Number);
+    cur=new Date(y,m,1).toISOString().substring(0,7);
+  }
+  const data={};
+  range.forEach(ym=>{data[ym]={total:0,interview:0,noShow:0,noContact:0,pass:0,fail:0};});
+  rows.forEach(r=>{
+    const created=(r.createdAt||'').substring(0,7);
+    const intM=(r['면접일']||'').substring(0,7);
+    const s=r['진행상태']||'';
+    if(data[created]) data[created].total++;
+    if(intM&&data[intM]){
+      if(['면접예정','면접완료','합격','최종합격','불참','불합격'].includes(s)) data[intM].interview++;
+      if(s==='불참') data[intM].noShow++;
+      if(s==='최종합격'||s==='합격') data[intM].pass++;
+      if(s==='불합격') data[intM].fail++;
+    }
+    if(data[created]&&['문자남겨놓음','콜백없음'].includes(s)) data[created].noContact++;
+  });
+  const maxT=Math.max(...range.map(ym=>data[ym].total),1);
+  const tbody=range.slice().reverse().map(ym=>{
+    const d=data[ym];
+    const [y,m]=ym.split('-');
+    const lbl=`${y.slice(2)}년 ${parseInt(m)}월`;
+    const bw=Math.round((d.total/maxT)*60);
+    return `<tr>
+      <td class="m-ym">${lbl}</td>
+      <td>${d.total?`<span class="m-val">${d.total}</span><span class="m-mini" style="width:${bw}px;background:#5b7ff5"></span>`:'<span class="m-empty">-</span>'}</td>
+      <td>${d.interview?`<span class="m-val">${d.interview}</span>`:'<span class="m-empty">-</span>'}</td>
+      <td>${d.noShow?`<span class="m-val" style="color:#f87171">${d.noShow}</span>`:'<span class="m-empty">-</span>'}</td>
+      <td>${d.noContact?`<span class="m-val" style="color:#fbbf24">${d.noContact}</span>`:'<span class="m-empty">-</span>'}</td>
+      <td>${d.pass?`<span class="m-val" style="color:#4ade80">${d.pass}</span>`:'<span class="m-empty">-</span>'}</td>
+      <td>${d.fail?`<span class="m-val" style="color:#f87171">${d.fail}</span>`:'<span class="m-empty">-</span>'}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('monthlyBody').innerHTML=tbody||'<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">데이터 없음</td></tr>';
+}
+
+function df(l,v,w){return `<div class="df${w?' wide':''}">`+`<label>${l}</label><p class="${v?'':'nil'}">${v?esc(v):'—'}</p></div>`;}
 function starsHTML(s){const f=Math.round(Math.min(s,10)/10*5);let h='<div class="stars">';for(let i=0;i<5;i++)h+=`<span class="star${i>=f?' off':''}">★</span>`;return h+`<span class="score-tag">${s}점</span></div>`;}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function tenure(d){
-  const s=new Date(d.substring(0,10)),n=new Date();
-  let y=n.getFullYear()-s.getFullYear(),m=n.getMonth()-s.getMonth();
-  if(n.getDate()<s.getDate()) m--;
+function tenure(d){return tenureBetween(d,new Date().toISOString());}
+function tenureBetween(start,end){
+  const s=new Date(start.substring(0,10)),e=new Date(end.substring(0,10));
+  let y=e.getFullYear()-s.getFullYear(),m=e.getMonth()-s.getMonth();
+  if(e.getDate()<s.getDate()) m--;
   if(m<0){y--;m+=12;}
   return y>0?`${y}년 ${m}개월`:m>0?`${m}개월`:'1개월 미만';
 }
 
 loadData();
+setInterval(()=>{renderEmployees();renderFormerEmployees();},60000);
 </script>
 </body>
 </html>
