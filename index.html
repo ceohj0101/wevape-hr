@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WE VAPE â ì ì ë©´ì  ê´ë¦¬</title>
+<title>WE VAPE — 신입 면접 관리</title>
 <style>
   :root{--bg:#0d0f1a;--bg2:#161929;--bg3:#1e2236;--border:rgba(255,255,255,.08);--text:#e8eaf2;--muted:#6b7799;--accent:#5b7ff5;--accent2:#7c6af5}
   *{box-sizing:border-box;margin:0;padding:0}
@@ -18,7 +18,7 @@
   .hero-sub{font-size:12px;color:var(--muted);margin-top:6px}
   .header-right{display:flex;align-items:center;gap:10px;position:relative}
   .update-time{font-size:11px;color:var(--muted)}
-  .reload-btn{bickground:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
+  .reload-btn{background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
   .reload-btn:hover{background:rgba(255,255,255,.12)}.reload-btn:disabled{opacity:.4;cursor:not-allowed}
   .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;padding:20px 24px 0}
   .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 18px}
@@ -59,7 +59,7 @@
   .card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;cursor:pointer;transition:border-color .15s,transform .15s;overflow:hidden;border-left:4px solid var(--sc)}
   .card:hover{border-color:rgba(255,255,255,.15);transform:translateY(-1px)}.card.open{border-color:rgba(255,255,255,.18)}
   .card-inner{padding:16px}
-  .card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .card-hdad;display:flex;align-items:center;gap:10px;margin-bottom:12px}
   .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0}
   .card-name{font-size:15px;font-weight:800;color:var(--text)}.card-sub{font-size:11px;color:var(--muted);margin-top:2px}
   .badge{margin-left:auto;display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800;white-space:nowrap;flex-shrink:0}
@@ -101,45 +101,45 @@
     </div>
     <div class="header-right">
       <span class="update-time" id="lastUpdate"></span>
-      <button class="reload-btn" id="reloadBtn" onclick="loadData()">â» ìë¡ê³ ì¹¨</button>
+      <button class="reload-btn" id="reloadBtn" onclick="loadData()">↻ 새로고침</button>
     </div>
   </div>
   <div>
-    <div class="hero-region">ì¸ì² Â· ê²½ê¸° ì§ì </div>
-    <div class="hero-title">ì ì ë©´ì  ê´ë¦¬</div>
-    <div class="hero-sub">ì§ìì íí© ë° ì±ì© íì´íë¼ì¸</div>
+    <div class="hero-region">인천 · 경기 지점</div>
+    <div class="hero-title">신입 면접 관리</div>
+    <div class="hero-sub">지원자 현황 및 채용 파이프라인</div>
   </div>
 </div>
 
 <div class="stats" id="stats"></div>
 <div class="emp-section" id="empSection" style="display:none">
-  <div class="section-hd"><div class="section-dot"></div><span class="section-title">ì¬ì§ì¤ ì§ì</span><span class="section-cnt" id="empCnt">0ëª</span></div>
+  <div class="section-hd"><div class="section-dot"></div><span class="section-title">재직중 직원</span><span class="section-cnt" id="empCnt">0명</span></div>
   <div class="emp-grid" id="empGrid"></div>
 </div>
 <div class="divider" id="empDivider" style="display:none"></div>
-<div class="pipeline-wrap"><div class="pipeline-title">ì±ì© íì´íë¼ì¸</div><div class="pipeline" id="pipeline"></div></div>
+<div class="pipeline-wrap"><div class="pipeline-title">채용 파이프라인</div><div class="pipeline" id="pipeline"></div></div>
 <div class="content">
-  <div class="loading" id="loadingEl"><div class="spinner"></div><p>ë°ì´í° ë¶ë¬ì¤ë ì¤...</p></div>
+  <div class="loading" id="loadingEl"><div class="spinner"></div><p>데이터 불러오는 중...</p></div>
   <div id="mainContent" style="display:none">
     <div id="errorBox" style="display:none"></div>
     <div class="filter-row" id="filterRow"></div>
     <div class="grid" id="grid"></div>
-    <div class="empty" id="emptyEl" style="display:none"><div class="empty-icon">ð</div>í´ë¹ ì¡°ê±´ì ì§ììê° ìì´ì.</div>
+    <div class="empty" id="emptyEl" style="display:none"><div class="empty-icon">🔍</div>해당 조건의 지원자가 없어요.</div>
   </div>
 </div>
-<div class="footer">We Vape â ì ì ë©´ì  ê´ë¦¬ ë´ë¶ ì´ì ìë£ Â· <a href="https://app.notion.com/p/8887bdc6711744e78475aed069f808ca" style="color:var(--accent);text-decoration:none">ë¸ì ìë³¸</a></div>
+<div class="footer">We Vape — 신입 면접 관리 내부 운영 자료 · <a href="https://app.notion.com/p/8887bdc6711744e78475aed069f808ca" style="color:var(--accent);text-decoration:none">노션 원본</a></div>
 
 <script>
 const SM={
-  'ìë¥ì ì':{color:'#64748b',bg:'rgba(100,116,139,.18)',dot:'#64748b'},
-  'ìë¥í©ê²©':{color:'#60a5fa',bg:'rgba(96,165,250,.15)',dot:'#3b82f6'},
-  'ë©´ì ëê¸°':{color:'#fbbf24',bg:'rgba(251,191,36,.13)',dot:'#f59e0b'},
-  'ë©´ì ìì ':{color:'#c084fc',bg:'rgba(192,132,252,.15)',dot:'#a855f7'},
-  'ë©´ì ìë£':{color:'#fb923c',bg:'rgba(251,146,60,.13)',dot:'#f97316'},
-  'ìµì¢í©ê²©':{color:'#4ade80',bg:'rgba(74,222,128,.13)',dot:'#22c55e'},
-  'ë¶í©ê²©':{color:'#f87171',bg:'rgba(248,113,113,.13)',dot:'#ef4444'},
+  '서류접수':{color:'#64748b',bg:'rgba(100,116,139,.18)',dot:'#64748b'},
+  '서류합격':{color:'#60a5fa',bg:'rgba(96,165,250,.15)',dot:'#3b82f6'},
+  '면접대기':{color:'#fbbf24',bg:'rgba(251,191,36,.13)',dot:'#f59e0b'},
+  '면접예정':{color:'#c084fc',bg:'rgba(192,132,252,.15)',dot:'#a855f7'},
+  '면접완료':{color:'#fb923c',bg:'rgba(251,146,60,.13)',dot:'#f97316'},
+  '최종합격':{color:'#4ade80',bg:'rgba(74,222,128,.13)',dot:'#22c55e'},
+  '불합격':{color:'#f87171',bg:'rgba(248,113,113,.13)',dot:'#ef4444'},
 };
-const PIPELINE=['ìë¥ì ì','ìë¥í©ê²©','ë©´ì ëê¸°','ë©´ì ìì ','ë©´ì ìë£'];
+const PIPELINE=['서류접수','서류합격','면접대기','면접예정','면접완료'];
 const AV=['#6366f1','#8b5cf6','#ec4899','#0ea5e9','#f97316','#22c55e','#a855f7','#14b8a6','#f59e0b'];
 let rows=[],flt='all',openIdx=null,empOpenIdx=null;
 
@@ -157,74 +157,74 @@ async function loadData(){
     rows=d.results||[];
     if(d.updated){
       const t=new Date(d.updated).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
-      document.getElementById('lastUpdate').textContent=t+' ìë°ì´í¸';
+      document.getElementById('lastUpdate').textContent=t+' 업데이트';
     }
   }catch(e){
     rows=[];
     const eb=document.getElementById('errorBox');
-    eb.className='error-box';eb.textContent='â ï¸ ë¡ë ì¤í¨: '+e.message;eb.style.display='block';
+    eb.className='error-box';eb.textContent='⚠️ 로드 실패: '+e.message;eb.style.display='block';
   }
-  btn.disabled=false;btn.textContent='â» ìë¡ê³ ì¹¨';
-  document.getElemntById('loadingEl').style.display='none';
+  btn.disabled=false;btn.textContent='↻ 새로고침';
+  document.getElementById('loadingEl').style.display='none';
   document.getElementById('mainContent').style.display='block';
   renderStats();renderEmployees();renderPipeline();renderFilters();renderCards();
 }
 
-const cnt=s=>rows.filter(r=>r['ì§íìí']===s).length;
+const cnt=s=>rows.filter(r=>r['진행상태']===s).length;
 
 function renderStats(){
-  const inP=cnt('ìë¥ì ì')+cnt('ìë¥í©ê²©')+cnt('ë©´ì ëê¸°')+cnt('ë©´ì ìì ')+cnt('ë©´ì ìë£');
+  const inP=cnt('서류접수')+cnt('서류합격')+cnt('면접대기')+cnt('면접예정')+cnt('면접완료');
   document.getElementById('stats').innerHTML=`
-    <div class="stat-card"><div class="stat-label">ì ì²´ ì§ìì</div><div class="stat-num">${rows.length}</div></div>
-    <div class="stat-card accent"><div class="stat-label">ì§í ì¤</div><div class="stat-num">${inP}</div></div>
-    <div class="stat-card green"><div class="stat-label">ì¬ì§ì¤</div><div class="stat-num">${cnt('ìµì¢í©ê²©')}</div></div>
-    <div class="stat-card red"><div class="stat-label">ë¶í©ê²©</div><div class="stat-num">${cnt('ë¶í©ê²©')}</div></div>`;
+    <div class="stat-card"><div class="stat-label">전체 지원자</div><div class="stat-num">${rows.length}</div></div>
+    <div class="stat-card accent"><div class="stat-label">진행 중</div><div class="stat-num">${inP}</div></div>
+    <div class="stat-card green"><div class="stat-label">재직중</div><div class="stat-num">${cnt('최종합격')}</div></div>
+    <div class="stat-card red"><div class="stat-label">불합격</div><div class="stat-num">${cnt('불합격')}</div></div>`;
 }
 
 function renderEmployees(){
-  const emps=rows.filter(r=>r['ì§íìí']==='ìµì¢í©ê²©');
+  const emps=rows.filter(r=>r['진행상태']==='최종합격');
   const sec=document.getElementById('empSection'),div=document.getElementById('empDivider');
   if(!emps.length){sec.style.display='none';div.style.display='none';return;}
   sec.style.display='block';div.style.display='block';
-  document.getElementById('empCnt').textContent=emps.length+'ëª';
+  document.getElementById('empCnt').textContent=emps.length+'명';
   document.getElementById('empGrid').innerHTML=emps.map((r,i)=>{
-    const ten=r['ìì¬ì¼']?tenure(r['ìì¬ì¼']):'';
+    const ten=r['입사일']?tenure(r['입사일']):'';
     const isOpen=empOpenIdx===i;
     return `<div class="emp-card${isOpen?' open':''}" onclick="toggleEmp(${i})">
       <div class="emp-card-head">
-        <div class="emp-avatar">${esc((r['ì´ë¦']||'?').slice(0,1))}</div>
-        <div><div class="emp-name">${esc(r['ì´ë¦']||'')}</div><div class="emp-role">${esc(r['ì§ìì§ë¬´']||'')}${r['ì§ìë§¤ì¥']?' Â· '+esc(r['ì§ìë§¤ì¥']):''}</div></div>
+        <div class="emp-avatar">${esc((r['이름']||'?').slice(0,1))}</div>
+        <div><div class="emp-name">${esc(r['이름']||'')}</div><div class="emp-role">${esc(r['지원직무']||'')}${r['지원매장']?' · '+esc(r['지원매장']):''}</div></div>
         ${ten?`<div class="emp-tenure">${ten}</div>`:''}
       </div>
-      ${r['ìì¬ì¼']?`<div class="emp-hire">ð ìì¬ ${r['ìì¬ì¼'].substring(0,10)}</div>`:''}
-      <div class="emp-detail"><div style="font-size:11px;color:#a0aec8">${r['ì°ë½ì²']?esc(r['ì°ë½ì²']):''}</div></div>
+      ${r['입사일']?`<div class="emp-hire">🎉 입사 ${r['입사일'].substring(0,10)}</div>`:''}
+      <div class="emp-detail"><div style="font-size:11px;color:#a0aec8">${r['연락처']?esc(r['연락처']):''}</div></div>
     </div>`;
   }).join('');
 }
 function toggleEmp(i){empOpenIdx=empOpenIdx===i?null:i;renderEmployees();}
 
 function renderPipeline(){
-  const rej=cnt('ë¶í©ê²©');
+  const rej=cnt('불합격');
   let h=PIPELINE.map((s,i)=>{
     const m=SM[s],active=flt===s;
-    return (i?'<span class="pipe-arrow">âº</span>':'')+
+    return (i?'<span class="pipe-arrow">›</span>':'')+
       `<div class="pipe${active?' active':''}" onclick="setFilter('${s}')">
         <div class="pipe-dot" style="background:${m.dot}"></div>
         <div class="pipe-info"><div class="pipe-name">${s}</div><div class="pipe-cnt">${cnt(s)}</div></div>
       </div>`;
   }).join('');
-  if(rej) h+=`<span class="pipe-arrow">Â·</span>
-    <div class="pipe${flt==='ë¶í©ê²©'?' active':''}" style="border-color:rgba(248,113,113,.25)" onclick="setFilter('ë¶í©ê²©')">
+  if(rej) h+=`<span class="pipe-arrow">·</span>
+    <div class="pipe${flt==='불합격'?' active':''}" style="border-color:rgba(248,113,113,.25)" onclick="setFilter('불합격')">
       <div class="pipe-dot" style="background:#ef4444"></div>
-      <div class="pipe-info"><div class="pipe-name" style="color:#f87171">ë¶í©ê²©</div><div class="pipe-cnt" style="color:#f87171">${rej}</div></div>
+      <div class="pipe-info"><div class="pipe-name" style="color:#f87171">불합격</div><div class="pipe-cnt" style="color:#f87171">${rej}</div></div>
     </div>`;
   document.getElementById('pipeline').innerHTML=h;
 }
 
 function renderFilters(){
-  const base=rows.filter(r=>r['ì§íìí']!=='ìµì¢í©ê²©');
-  let h=`<div class="chip${flt==='all'?' active':''}" onclick="setFilter('all')">ì ì²´ ${base.length}</div>`;
-  [...PIPELINE,'ë¶í©ê²©'].forEach(s=>{
+  const base=rows.filter(r=>r['진행상태']!=='최종합격');
+  let h=`<div class="chip${flt==='all'?' active':''}" onclick="setFilter('all')">전체 ${base.length}</div>`;
+  [...PIPELINE,'불합격'].forEach(s=>{
     if(!cnt(s)) return;
     const m=SM[s];
     h+=`<div class="chip${flt===s?' active':''}" onclick="setFilter('${s}')" style="${flt===s?`border-color:${m.dot};color:${m.color};background:${m.bg}`:`color:${m.color}`}">${s} ${cnt(s)}</div>`;
@@ -236,8 +236,8 @@ function setFilter(f){flt=f;openIdx=null;renderPipeline();renderFilters();render
 function toggleCard(i){openIdx=openIdx===i?null:i;renderCards();}
 
 function renderCards(){
-  const base=rows.filter(r=>r['ì§íìí']!=='ìµì¢í©ê²©');
-  const visible=flt==='all'?base:base.filter(r=>r['ì§íìí']===flt);
+  const base=rows.filter(r=>r['진행상태']!=='최종합격');
+  const visible=flt==='all'?base:base.filter(r=>r['진행상태']===flt);
   const grid=document.getElementById('grid'),empty=document.getElementById('emptyEl');
   if(!visible.length){grid.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
@@ -245,53 +245,53 @@ function renderCards(){
 }
 
 function cardHTML(row,i){
-  const s=row['ì§íìí']||'ìë¥ì ì',m=SM[s]||SM['ìë¥ì ì'];
-  const name=row['ì´ë¦']||'ì´ë¦ ë¯¸ìë ¥';
-  const birth=row['ìëìì¼'],ageStr=birth?`${new Date().getFullYear()-parseInt(birth.substring(0,4))}ì¸`:'';
-  const intv=row['ë©´ì ì¼']?row['ë©´ì ì¼'].substring(0,10):'';
-  const score=row['íê°ì ì'],isOpen=openIdx===i,av=AV[i%AV.length];
+  const s=row['진행상태']||'서류접수',m=SM[s]||SM['서류접수'];
+  const name=row['이름']||'이름 미입�%';
+  const birth=row['생년월일'],ageStr=birth?`${new Date().getFullYear()-parseInt(birth.substring(0,4))}세`:'';
+  const intv=row['면접일']?row['면접일'].substring(0,10):'';
+  const score=row['평가점수'],isOpen=openIdx===i,av=AV[i%AV.length];
   return `<div class="card${isOpen?' open':''}" style="--sc:${m.dot}" onclick="toggleCard(${i})">
     <div class="card-inner">
       <div class="card-head">
         <div class="avatar" style="background:${av}">${esc(name.slice(0,1))}</div>
-        <div><div class="card-name">${esc(name)}</div><div class="card-sub">${ageStr?ageStr+' Â· ':''}${esc(row['ì§ìì§ë¬´']||'')}</div></div>
+        <div><div class="card-name">${esc(name)}</div><div class="card-sub">${ageStr?ageStr+' · ':''}${esc(row['지원직무']||'')}</div></div>
         <span class="badge" style="background:${m.bg};color:${m.color}">${esc(s)}</span>
       </div>
       <div class="info-list">
-        <div class="info-row"><span class="info-icon">ð</span>${esc(row['ì§ìë§¤ì¥']||'-')}</div>
-        ${intv?`<div class="info-row"><span class="info-icon">ð</span>ë©´ì  ${intv}</div>`:''}
-        ${row['ë©´ì ê´']?`<div class="info-row"><span class="info-icon">ð¤</span>${esc(row['ë©´ì ê´'])}</div>`:''}
+        <div class="info-row"><span class="info-icon">📍</span>${esc(row['지원매장']||'-')}</div>
+        ${intv?`<div class="info-row"><span class="info-icon">📅</span>면접 ${intv}</div>`:''}
+        ${row['면접관']?`<div class="info-row"><span class="info-icon">👤</span>${esc(row['면접관'])}</div>`:''}
       </div>
       <div class="card-foot">
-        ${score!=null?starsHTML(score):'<span style="color:#2d3148;font-size:11px">íê° ìì</span>'}
-        <span class="chevron">â¼</span>
+        ${score!=null?starsHTML(score):'<span style="color:#2d3148;font-size:11px">평가 없음</span>'}
+        <span class="chevron">▼</span>
       </div>
     </div>
     <div class="detail">
       <div class="detail-grid">
-        ${df('ì°ë½ì²',row['ì°ë½ì²'])}${df('ì´ë©ì¼',row['ì´ë©ì¼'])}
-        ${df('íë ¥',row['íë ¥'])}${df('ìê²©ì¦',row['ìê²©ì¦']||'')}
-        ${intv?df('ë©´ì ì¼',intv):''}
-        ${df('ê²½ë ¥ ìì½',row['ê²½ë ¥ì´ë ¥ììì½'],true)}
-        ${df('ê°ì ',row['ê°ì '],true)}${df('ì°ë ¤ì¬í­',row['ì°ë ¤ì¬í­ê°ì ìì¸'],true)}
+        ${df('연락처',row['연락처'])}${df('이메일',row['이메일'])}
+        ${df('학력',row['학력'])}${df('자격증',row['자격증']||'')}
+        ${intv?df('면접일',intv):''}
+        ${df('경력 요약',row['경력이력서요약'],true)}
+        ${df('강점',row['강점'],true)}${df('우려사항',row['우려사항감점요인'],true)}
       </div>
-      ${row['url']?`<a class="notion-btn" href="${row['url']}" target="_blank">ð ë¸ììì ë³´ê¸°</a>`:''}
+      ${row['url']?`<a class="notion-btn" href="${row['url']}" target="_blank">📋 노션에서 보기</a>`:''}
       <div class="action-row" style="margin-top:10px;opacity:.5">
-        <button class="act-btn" style="background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.4);color:#4ade80">â» ìíë³ê²½ì ë¸ììì</button>
+        <button class="act-btn" style="background:rgba(74,222,128,.15);border-color:rgba(74,222,128,.4);color:#4ade80">※ 상태변경은 노션에서</button>
       </div>
     </div>
   </div>`;
 }
 
-function df(l,v,w){return `<div class="df${w?' wide':''}"><label>${l}</label><p class="${v?'':'nil'}">${v?esc(v):'â'}</p></div>`;}
-function starsHTML(s){const f=Math.round(Math.min(s,10)/10*5);let h='<div class="stars">';for(let i=0;i<5;i++)h+=`<span class="star${i>=f?' off':''}">â</span>`;return h+`<span class="score-tag">${s}ì </span></div>`;}
+function df(l,v,w){return `<div class="df${w?' wide':''}"><label>${l}</label><p class="${v?'':'nil'}">${v?esc(v):'—'}</p></div>`;}
+function starsHTML(s){const f=Math.round(Math.min(s,10)/10*5);let h='<div class="stars">';for(let i=0;i<5;i++)h+=`<span class="star${i>=f?' off':''}">★</span>`;return h+`<span class="score-tag">${s}점</span></div>`;}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function tenure(d){
   const s=new Date(d.substring(0,10)),n=new Date();
   let y=n.getFullYear()-s.getFullYear(),m=n.getMonth()-s.getMonth();
   if(n.getDate()<s.getDate()) m--;
   if(m<0){y--;m+=12;}
-  return y>0?`${y}ë ${m}ê°ì`:m>0?`${m}ê°ì`:'1ê°ì ë¯¸ë§';
+  return y>0?`${y}년 ${m}개월`:m>0?`${m}개월`:'1개월 미만';
 }
 
 loadData();
