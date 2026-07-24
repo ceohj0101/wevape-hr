@@ -555,7 +555,7 @@ function renderMonthlyTable(){
     let nm=m+1;let ny=y;if(nm>12){ny++;nm=1;}cur=ny+'-'+String(nm).padStart(2,'0');
   }
   const data={};
-  range.forEach(ym=>{data[ym]={total:0+interview:0,noShow:0,noContact:0,pass:0,fail:0};});
+  range.forEach(ym=>{data[ym]={total:0,interview:0,noShow:0,noContact:0,pass:0,fail:0};});
   rows.forEach(r=>{
     const created=(r.createdAt||'').substring(0,7);
     const intM=(r['면접일']||'').substring(0,7);
