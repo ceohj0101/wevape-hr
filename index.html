@@ -554,7 +554,7 @@ function cardHTML(row,i){
           <div class="card-sub">${ageStr?ageStr+' · ':''}${esc(row['지원직무']||'-')}${row['연락처']?' · '+esc(row['연락처']):''}</div>
         </div>
         <span class="badge" style="background:${m.bg};color:${m.color}">${esc(s)}</span>
-        ${sessionStorage.getItem('img_'+pid)?`<button class="resume-btn" onclick="event.stopPropagation();showResumeImg('${pid}')">🖼 이력서</button>`:''}
+        ${sessionStorage.getItem('img_'+pidClean)?`<button class="resume-btn" onclick="event.stopPropagation();showResumeImg('${pidClean}')">🖼 이력서</button>`:''}
       </div>
       ${dateBanner}
       ${evalBox}
@@ -882,7 +882,11 @@ async function submitAddApplicant(){
     const d=await r.json();
     if(!r.ok||d.error)throw new Error(d.error||'오류 발생');
     toast('✓ '+name+' 지원자가 추가됐습니다');
-    if(_imgBase64 && d.id) sessionStorage.setItem('img_'+d.id.replace(/-/g,''), 'data:image/jpeg;base64,'+_imgBase64);
+    if(_imgBase64 && d.id){
+      const cleanId=d.id.replace(/-/g,'');
+      sessionStorage.setItem('img_'+cleanId,'data:image/jpeg;base64,'+_imgBase64);
+      toast('🖼 이력서 이미지 저장됨 — 카드에서 확인 가능');
+    }
     closeAddModal();
     await loadData();
   }catch(e){
