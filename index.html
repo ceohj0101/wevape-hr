@@ -177,6 +177,14 @@
   .card-eval-area::placeholder{color:var(--muted);font-size:12px}
   .card-eval-area.saving{border-color:var(--accent)}
   .card-eval-area.saved{border-color:#4ade80}
+
+  /* ===== 이력서 라이트박스 ===== */
+  .resume-btn{background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.4);color:#7a5f00;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s}
+  .resume-btn:hover{background:rgba(245,197,24,.25)}
+  #resumeLightbox{position:fixed;inset:0;background:rgba(10,15,30,.85);z-index:2000;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto;backdrop-filter:blur(6px)}
+  .lb-inner{position:relative;max-width:520px;width:100%}
+  .lb-close{position:sticky;top:0;left:100%;background:rgba(10,15,30,.8);color:#fff;border:none;border-radius:50%;width:34px;height:34px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-bottom:-34px;z-index:1;float:right}
+  .lb-img{width:100%;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);display:block}
 </style>
 </head>
 <body>
@@ -546,6 +554,7 @@ function cardHTML(row,i){
           <div class="card-sub">${ageStr?ageStr+' · ':''}${esc(row['지원직무']||'-')}${row['연락처']?' · '+esc(row['연락처']):''}</div>
         </div>
         <span class="badge" style="background:${m.bg};color:${m.color}">${esc(s)}</span>
+        ${sessionStorage.getItem('img_'+pid)?`<button class="resume-btn" onclick="event.stopPropagation();showResumeImg('${pid}')">🖼 이력서</button>`:''}
       </div>
       ${dateBanner}
       ${evalBox}
@@ -756,6 +765,18 @@ async function resignEmployee(pid,name,btn){
 }
 
 
+function showResumeImg(pid){
+  const imgData=sessionStorage.getItem('img_'+pid)||sessionStorage.getItem('img_'+pid.replace(/-/g,''));
+  if(!imgData){toast('저장된 이력서 이미지 없음','err');return;}
+  document.getElementById('lbImg').src=imgData;
+  document.getElementById('resumeLightbox').style.display='flex';
+  document.body.style.overflow='hidden';
+}
+function closeLightbox(){
+  document.getElementById('resumeLightbox').style.display='none';
+  document.body.style.overflow='';
+}
+
 async function saveEval(pageId,el){
   if(!pageId) return;
   const text=el.value;
@@ -861,6 +882,7 @@ async function submitAddApplicant(){
     const d=await r.json();
     if(!r.ok||d.error)throw new Error(d.error||'오류 발생');
     toast('✓ '+name+' 지원자가 추가됐습니다');
+    if(_imgBase64 && d.id) sessionStorage.setItem('img_'+d.id.replace(/-/g,''), 'data:image/jpeg;base64,'+_imgBase64);
     closeAddModal();
     await loadData();
   }catch(e){
@@ -869,5 +891,11 @@ async function submitAddApplicant(){
   }
 }
 </script>
+<div id="resumeLightbox" style="display:none" onclick="closeLightbox()">
+  <div class="lb-inner" onclick="event.stopPropagation()">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <img id="lbImg" class="lb-img">
+  </div>
+</div>
 </body>
 </html>
