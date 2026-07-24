@@ -366,7 +366,7 @@ function renderFilters(){
   const base=rows.filter(r=>r['진행상태']!=='최종합격'&&r['진행상태']!=='퇴사');
   let h=`<div class="chip${flt==='all'?' active':''}" onclick="setFilter('all')">전체 ${base.length}</div>`;
   const shown=new Set(base.map(r=>r['진행상태']));
-  [...PIPELINE,'불합격','불참','문자남겨놓음','콜백없음'].forEach(s=>{
+  [...PIPELINE,'6��합격','불참','문자남겨놓음','콜백없음'].forEach(s=>{
     if(!shown.has(s)||!cnt(s)) return;
     const m=SM[s]||FSM;
     h+=`<div class="chip${flt===s?' active':''}" onclick="setFilter('${s}')" style="${flt===s?`border-color:${m.dot};color:${m.color};background:${m.bg}`:`color:${m.color}`}">${s} ${cnt(s)}</div>`;
@@ -394,11 +394,26 @@ function cardHTML(row,i){
   const s=row['진행상태']||'서류접수',m=SM[s]||FSM;
   const name=row['이름']||'이름 없음';
   const birth=row['생년월일'],ageStr=birth?`${new Date().getFullYear()-parseInt(birth.substring(0,4))}세`:'';
-  const intv=row['면접일']?row['면접일'].substring(0,10):'';
+  const rawDate=row['면접일']||'';
+  const intv=rawDate?rawDate.substring(0,10):'';
+  // Extract time if datetime (e.g. "2026-07-25T14:00:00.000+09:00")
+  let intvTime='';
+  if(rawDate&&rawDate.includes('T')){
+    const tPart=rawDate.substring(11,16); // "14:00"
+    intvTime=tPart;
+  }
   const score=row['평가점수'],isOpen=openIdx===i,av=AV[i%AV.length];
   const actions=STAGE_ACTIONS[s]||[];
   const pid=row['id']||'';
   const actionBtns=actions.length?`<div class="action-btns">${actions.map(a=>`<button class="act-btn ${a.cls}" onclick="event.stopPropagation();updateStatus('${pid}','${a.next}',this)">${a.label}</button>`).join('')}</div>`:'';
+  // Show time editor for 면접예정/면접완료
+  const showTimeEditor=['면접예정','면접완료','면접대기'].includes(s);
+  const timeRow=intv&&showTimeEditor?`<div class="time-row" onclick="event.stopPropagation()">
+    <span class="info-icon">⏰</span>
+    <input class="time-input" type="time" value="${intvTime}" id="ti_${pid.replace(/-/g,'')}"
+      onchange="saveTime('${pid}','${intv}',this.value,this)">
+    ${intvTime?`<span style="color:#7ba4ff;font-size:10px">${intvTime}</span>`:'<span style="color:var(--muted);font-size:10px">시간 미설정</span>'}
+  </div>`:'';
   return `<div class="card${isOpen?' open':''}" style="--sc:${m.dot}" onclick="toggleCard(${i})">
     <div class="card-inner">
       <div class="card-head">
@@ -409,7 +424,8 @@ function cardHTML(row,i){
       ${actionBtns}
       <div class="info-list">
         <div class="info-row"><span class="info-icon">📍</span>${esc(row['지원매장']||'-')}</div>
-        ${intv?`<div class="info-row"><span class="info-icon">📅</span>면접 ${intv}</div>`:''}
+        ${intv?`<div class="info-row"><span class="info-icon">📅</span>면접 ${intv}${intvTime?' '+intvTime:''}</div>`:''}
+        ${timeRow}
         ${row['면접관']?`<div class="info-row"><span class="info-icon">👤</span>${esc(row['면접관'])}</div>`:''}
         ${row['연락처']?`<div class="info-row"><span class="info-icon">📞</span>${esc(row['연락처'])}</div>`:''}
       </div>
@@ -528,7 +544,7 @@ function renderMonthlyTable(){
   while(cur<=toYM){
     range.push(cur);
     const [y,m]=cur.split('-').map(Number);
-    cur=new Date(y,m,1).toISOString().substring(0,7);
+    let nm=m+1;let ny=y;if(nm>12){ny++;nm=1;}cur=ny+'-'+String(nm).padStart(2,'0');
   }
   const data={};
   range.forEach(ym=>{data[ym]={total:0,interview:0,noShow:0,noContact:0,pass:0,fail:0};});
@@ -575,6 +591,28 @@ function tenureBetween(start,end){
   if(m<0){y--;m+=12;}
   return y>0?`${y}년 ${m}개월`:m>0?`${m}개월`:'1개월 미만';
 }
+
+async function saveTime(pageId,dateStr,timeStr,inputEl){
+  if(!pageId||!dateStr){toast('날짜 정보 없음','err');return;}
+  inputEl.disabled=true;
+  try{
+    // Build ISO datetime with KST offset (+09:00)
+    const dt=timeStr?dateStr+'T'+timeStr+':00.000+09:00':dateStr;
+    const r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({pageId,field:'면접일',value:dt})});
+    const d=await r.json();
+    if(!r.ok||d.error) throw new Error(d.error||'Error');
+    toast(timeStr?'⏰ '+timeStr+' 저장됨':'날짜 저장됨');
+    // Update local rows without full reload
+    const rec=rows.find(r=>r.id===pageId);
+    if(rec) rec['면접일']=dt;
+    renderCards();
+  }catch(e){
+    toast('저장 실패: '+e.message,'err');
+  }
+  inputEl.disabled=false;
+}
+
 
 loadData();
 setInterval(()=>{renderEmployees();renderFormerEmployees();},60000);
