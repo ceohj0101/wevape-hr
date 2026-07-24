@@ -237,6 +237,8 @@ const STACE_ACTIONS={
   '면접대기':[{label:'✅ 면접완료',next:'면접완료',cls:'green'},{label:'❌ 불참',next:'불참',cls:'red'}],
   '면접예정':[{label:'✅ 면접완료',next:'면접완료',cls:'green'},{label:'❌ 불참',next:'불참',cls:'red'}],
   '면접완료':[{label:'🎉 합격',next:'최종합격',cls:'green'},{label:'✗ 불합격',next:'불합격',cls:'red'}],
+  '불합격':[{label:'↩️ 재검토',next:'면접완료',cls:'blue'}],
+  '불참':[{label:'📅 재일정',next:'면접예정',cls:'purple'}],
   '문자남겨놓음':[{label:'📞 다시연락',next:'서류합격/연락중',cls:'blue'},{label:'📵 콜백없음',next:'콜백없음',cls:'gray'}],
   '콜백없음':[{label:'📞 다시연락',next:'서류합격/연락중',cls:'blue'}],
 };
@@ -402,7 +404,8 @@ function renderCards(){
   const grid=document.getElementById('grid'),empty=document.getElementById('emptyEl');
   if(!visible.length){grid.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
-  grid.innerHTML=visible.map(row=>cardHTML(row,rows.indexOf(row))).join('');
+  const sorted=[...visible].sort((a,b)=>{const da=a['면접일']||'9999';const db=b['면접일']||'9999';return da<db?-1:da>db?1:0;});
+  grid.innerHTML=sorted.map(row=>cardHTML(row,rows.indexOf(row))).join('');
 }
 
 function cardHTML(row,i){
@@ -569,7 +572,7 @@ function renderMonthlyTable(){
     const created=(r.createdAt||'').substring(0,7);
     const intM=(r['면접일']||'').substring(0,7);
     const s=r['진행상태']||'';
-    if(data[created]) data[created].total++;
+    if(data[created]&&s!=='최종합격'&&s!=='퇴사') data[created].total++;
     if(intM&&data[intM]){
       if(['면접예정','면접완료','합격','최종합격','불참','불합격'].includes(s)) data[intM].interview++;
       if(s==='불참') data[intM].noShow++;
