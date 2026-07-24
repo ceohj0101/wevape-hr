@@ -259,31 +259,68 @@ async function updateStatus(pageId,status,btnEl){
   }
 }
 
-async function loadData(){
-  const btn=document.getElementById('reloadBtn');
-  btn.disabled=true;btn.textContent='...';
-  document.getElementById('loadingEl').style.display='block';
-  document.getElementById('mainContent').style.display='none';
-  document.getElementById('stats').innerHTML='';
-  document.getElementById('pipeline').innerHTML='';
-  try{
-    const r=await fetch(WORKER+'?_='+Date.now());
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const d=await r.json();
-    rows=d.records||d.results||[];
-    if(d.updatedAt||d.updated){
-      const t=new Date(d.updatedAt||d.updated).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
-      document.getElementById('lastUpdate').textContent=t+' 업데이트';
-    }
-  }catch(e){
-    rows=[];
-    const eb=document.getElementById('errorBox');
-    eb.className='error-box';eb.textContent='⚠️ 로드 실패: '+e.message;eb.style.display='block';
+const CACHE_KEY='wevape_data_v1';
+const CACHE_TTL=5*60*1000;
+
+function applyData(d){
+  rows=d.records||d.results||[];
+  if(d.updatedAt||d.updated){
+    const t=new Date(d.updatedAt||d.updated).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    document.getElementById('lastUpdate').textContent=t+' 업데이트';
   }
-  btn.disabled=false;btn.textContent='↻ 새로고침';
   document.getElementById('loadingEl').style.display='none';
   document.getElementById('mainContent').style.display='block';
   renderAll();
+}
+
+async function loadData(forceRefresh=false){
+  const btn=document.getElementById('reloadBtn');
+  btn.disabled=true;btn.textContent='...';
+  if(!forceRefresh){
+    try{
+      const c=localStorage.getItem(CACHE_KEY);
+      if(c){
+        const {data,ts}=JSON.parse(c);
+        if(Date.now()-ts<CACHE_TTL){
+          applyData(data);
+          fetchFresh(btn,true);
+          return;
+        }
+      }
+    }catch(e){}
+  }
+  document.getElementById('loadingEl').style.display='block';
+  document.getElementById('mainContent').style.display='none';
+  fetchFresh(btn,false);
+}
+
+async function fetchFresh(btn,background){
+  try{
+    const controller=new AbortController();
+    const tid=setTimeout(()=>controller.abort(),10000);
+    const r=await fetch(WORKER,{signal:controller.signal});
+    clearTimeout(tid);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    localStorage.setItem(CACHE_KEY,JSON.stringify({data:d,ts:Date.now()}));
+    applyData(d);
+    if(background) toast('✓ 최신 데이터 반영됨');
+  }catch(e){
+    if(!background){
+      try{
+        const c=localStorage.getItem(CACHE_KEY);
+        if(c){ const {data}=JSON.parse(c); applyData(data); toast('⚠️ 오프라인 — 캐시 표시 중','err'); }
+        else{
+          rows=[];
+          const eb=document.getElementById('errorBox');
+          eb.className='error-box';eb.textContent='⚠️ 로드 실패: '+e.message;eb.style.display='block';
+          document.getElementById('loadingEl').style.display='none';
+          document.getElementById('mainContent').style.display='block';
+        }
+      }catch(e2){}
+    }
+  }
+  btn.disabled=false;btn.textContent='↻ 새로고침';
 }
 
 function renderAll(){renderStats();renderPipeline();renderFilters();renderCards();renderEmployees();renderFormerEmployees();renderMonthly();}
