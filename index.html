@@ -154,6 +154,15 @@
   .modal-submit{background:var(--accent);border:none;border-radius:9px;padding:9px 20px;font-size:13px;font-weight:800;color:#1a1000;cursor:pointer;transition:background .15s}
   .modal-submit:hover{background:var(--accent2)}
   .modal-submit:disabled{opacity:.5;cursor:default}
+  .mf-img-zone{border:2px dashed var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:border-color .15s;background:#fafbff;position:relative;min-height:70px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px}
+  .mf-img-zone:hover{border-color:var(--accent)}
+  .mf-img-zone.has-img{border-style:solid;border-color:rgba(245,197,24,.5);padding:8px}
+  .img-thumb{max-width:100%;max-height:130px;border-radius:8px;object-fit:contain}
+  .img-clear-btn{position:absolute;top:6px;right:8px;background:rgba(10,15,30,.55);color:#fff;border:none;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center}
+  .img-analyze-bar{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);padding:6px 10px;background:rgba(245,197,24,.08);border-radius:8px;margin-top:8px}
+  .img-analyze-bar .spinner{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
 </style>
 </head>
 <body>
@@ -180,6 +189,26 @@
   <div class="modal-box">
     <div class="modal-title"><span>📋</span>새 지원자 추가</div>
     <div class="modal-fields">
+      <div>
+        <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px">이력서 / 프로필 이미지</label>
+        <div class="mf-img-zone" id="imgZone" onclick="document.getElementById('mf-img').click()">
+          <input type="file" id="mf-img" accept="image/*" style="display:none" onchange="handleImgUpload(event)">
+          <div id="imgPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--muted)">
+            <span style="font-size:22px">📷</span>
+            <span style="font-size:12px;font-weight:600">클릭하여 이미지 업로드</span>
+            <span style="font-size:10px">이력서 · 카톡 · 프로필 스크린샷</span>
+          </div>
+          <div id="imgPreviewWrap" style="display:none;width:100%">
+            <img id="imgThumb" class="img-thumb">
+            <button class="img-clear-btn" onclick="clearImg(event)">✕</button>
+          </div>
+        </div>
+        <div class="img-analyze-bar" id="imgAnalyzeBar" style="display:none">
+          <div class="spinner"></div>
+          <span>AI가 이미지에서 정보를 읽는 중...</span>
+        </div>
+      </div>
+
       <div class="mf-row">
         <div class="mf"><label>이름 *</label><input type="text" id="mf-name" placeholder="홍길동"></div>
         <div class="mf"><label>연락처</label><input type="tel" id="mf-phone" placeholder="010-0000-0000"></div>
@@ -701,10 +730,65 @@ async function resignEmployee(pid,name,btn){
 loadData();
 setInterval(()=>{renderEmployees();renderFormerEmployees();},60000);
 
+let _imgBase64=null;
+function handleImgUpload(e){
+  const file=e.target.files[0];if(!file)return;
+  // 이미지 리사이즈 후 base64
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      const MAX=900;
+      let w=img.width,h=img.height;
+      if(w>MAX||h>MAX){const s=Math.min(MAX/w,MAX/h);w=Math.round(w*s);h=Math.round(h*s);}
+      const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      const b64=canvas.toDataURL('image/jpeg',0.85).split(',')[1];
+      _imgBase64=b64;
+      document.getElementById('imgThumb').src='data:image/jpeg;base64,'+b64;
+      document.getElementById('imgPreviewWrap').style.display='block';
+      document.getElementById('imgPlaceholder').style.display='none';
+      document.getElementById('imgZone').classList.add('has-img');
+      analyzeImg(b64);
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function clearImg(e){
+  e.stopPropagation();
+  _imgBase64=null;
+  document.getElementById('mf-img').value='';
+  document.getElementById('imgPreviewWrap').style.display='none';
+  document.getElementById('imgPlaceholder').style.display='flex';
+  document.getElementById('imgZone').classList.remove('has-img');
+}
+async function analyzeImg(b64){
+  const bar=document.getElementById('imgAnalyzeBar');
+  bar.style.display='flex';
+  try{
+    const r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'parse-image',imageBase64:b64})});
+    const d=await r.json();
+    if(d.parsed){
+      const p=d.parsed;
+      if(p.name)document.getElementById('mf-name').value=p.name;
+      if(p.phone)document.getElementById('mf-phone').value=p.phone;
+      if(p.gender&&['남','여'].includes(p.gender))document.getElementById('mf-gender').value=p.gender;
+      if(p.birth)document.getElementById('mf-birth').value=p.birth;
+      if(p.position)document.getElementById('mf-pos').value=p.position;
+      if(p.memo)document.getElementById('mf-memo').value=p.memo;
+      toast('✓ 이미지에서 정보를 자동입력했습니다');
+    }
+  }catch(err){toast('이미지 분석 실패','err');}
+  finally{bar.style.display='none';}
+}
 function openAddModal(){
   ['mf-name','mf-phone','mf-gender','mf-birth','mf-pos','mf-memo'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.value='';
   });
+  clearImg({stopPropagation:()=>{}});
+  document.getElementById('imgAnalyzeBar').style.display='none';
   document.getElementById('addModal').style.display='flex';
   document.getElementById('mf-name').focus();
 }
