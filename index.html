@@ -240,6 +240,15 @@ const STACE_ACTIONS={
   '문자남겨놓음':[{label:'📞 다시연락',next:'서류합격/연락중',cls:'blue'},{label:'📵 콜백없음',next:'콜백없음',cls:'gray'}],
   '콜백없음':[{label:'📞 다시연락',next:'서류합격/연락중',cls:'blue'}],
 };
+const STAGE_ACTIONS={
+  '서류접수':[{label:'📞 연락완료',next:'서류합격/연락중',cls:'blue'},{label:'💬 문자남겨놓음',next:'문자남겨놓음',cls:'yellow'},{label:'📵 콜백없음',next:'콜백없음',cls:'gray'}],
+  '서류합격/연락중':[{label:'📅 면접 확정',next:'면접예정',cls:'purple'},{label:'💬 문자남겨놓음',next:'문자남겨놓음',cls:'yellow'},{label:'📵 콜백없음',next:'콜백없음',cls:'gray'}],
+  '면접대기':[{label:'✅ 면접완료',next:'면접완료',cls:'green'},{label:'❌ 불참',next:'불참',cls:'red'}],
+  '면접예정':[{label:'✅ 면접완료',next:'면접완료',cls:'green'},{label:'❌ 불참',next:'불참',cls:'red'}],
+  '면접완료':[{label:'🎉 합격',next:'최종합격',cls:'green'},{label:'✗ 불합격',next:'불합격',cls:'red'}],
+  '문자남겨놓음':[{label:'📞 다시연락',next:'서류합격/연락중',cls:'blue'},{label:'📵 콜백없음',next:'콜백없음',cls:'gray'}],
+  '콜백없음':[{label:'📞 다시연락',next:'서류합격/연락중',cls:'blue'}],
+};
 const AV=['#6366f1','#8b5cf6','#ec4899','#0ea5e9','#f97316','#a855f7','#14b8a6','#f59e0b','#3b82f6'];
 let rows=[],flt='면접예정',openIdx=null,empOpenIdx=null,exitOpenIdx=null;
 
