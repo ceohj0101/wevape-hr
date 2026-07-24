@@ -163,6 +163,20 @@
   .img-analyze-bar .spinner{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
 
+
+  /* ===== 카드 날짜 배너 + 평가란 ===== */
+  .card-date-banner{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(245,197,24,.07);border-radius:10px;margin:0 14px 10px;border:1px solid rgba(245,197,24,.18)}
+  .card-date-main{font-size:18px;font-weight:900;color:var(--text);letter-spacing:-.5px}
+  .card-dday{font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;background:rgba(91,127,245,.12);color:#5b7ff5;white-space:nowrap}
+  .card-dday.today{background:var(--accent);color:#1a1000}
+  .card-dday.past{background:rgba(100,116,139,.1);color:var(--muted)}
+  .card-eval-wrap{padding:0 14px;margin-bottom:10px}
+  .card-eval-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px}
+  .card-eval-area{width:100%;min-height:82px;border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--text);resize:vertical;background:#fafbff;font-family:inherit;transition:border-color .15s,box-shadow .15s;box-sizing:border-box;line-height:1.6;display:block}
+  .card-eval-area:focus{outline:none;border-color:var(--accent);background:#fff;box-shadow:0 0 0 3px rgba(245,197,24,.1)}
+  .card-eval-area::placeholder{color:var(--muted);font-size:12px}
+  .card-eval-area.saving{border-color:var(--accent)}
+  .card-eval-area.saved{border-color:#4ade80}
 </style>
 </head>
 <body>
@@ -482,59 +496,74 @@ function renderCards(){
 function cardHTML(row,i){
   const s=row['진행상태']||'서류접수',m=SM[s]||FSM;
   const name=row['이름']||'이름 없음';
-  const birth=row['생년월일'],ageStr=birth?`${new Date().getFullYear()-parseInt(birth.substring(0,4))}세`:'';
+  const birth=row['생년월일'];
+  const ageStr=birth?`${new Date().getFullYear()-parseInt(birth.substring(0,4))}세`:'';
   const rawDate=row['면접일']||'';
   const intv=rawDate?rawDate.substring(0,10):'';
-  // Extract time if datetime (e.g. "2026-07-25T14:00:00.000+09:00")
   let intvTime='';
-  if(rawDate&&rawDate.includes('T')){
-    const tPart=rawDate.substring(11,16); // "14:00"
-    intvTime=tPart;
-  }
+  if(rawDate&&rawDate.includes('T')) intvTime=rawDate.substring(11,16);
   const score=row['평가점수'],isOpen=openIdx===i,av=AV[i%AV.length];
   const actions=STAGE_ACTIONS[s]||[];
-  const pid=row['id']||'';
+  const pid=row['id']||'',pidClean=pid.replace(/-/g,'');
+  // 날짜 배너 (크게)
+  let dateBanner='';
+  if(intv){
+    const d=new Date(intv+'T12:00:00');
+    const days=['일','월','화','수','목','금','토'];
+    const today=new Date();today.setHours(0,0,0,0);
+    const diff=Math.round((new Date(intv+'T00:00:00')-today)/864e5);
+    const dday=diff===0?'D-Day':diff>0?`D-${diff}`:`D+${Math.abs(diff)}`;
+    const ddayCls=diff<0?'past':diff===0?'today':'';
+    dateBanner=`<div class="card-date-banner">
+      <div class="card-date-main">${d.getMonth()+1}월 ${d.getDate()}일 (${days[d.getDay()]})${intvTime?' · '+intvTime:''}</div>
+      <span class="card-dday ${ddayCls}">${dday}</span>
+    </div>`;
+  }
+  // 평가란 (메인)
+  const evalTxt=row['경력이력서요약']||'';
+  const evalBox=`<div class="card-eval-wrap" onclick="event.stopPropagation()">
+    <div class="card-eval-label">📝 면접 평가</div>
+    <textarea class="card-eval-area" id="eval_${pidClean}" placeholder="면접 내용, 인상, 강점/우려사항 등을 기록하세요..." onblur="saveEval('${pid}',this)" onkeydown="if(event.ctrlKey&&event.key==='Enter'){saveEval('${pid}',this);this.blur()}else if(event.key==='Escape')this.blur()">${esc(evalTxt)}</textarea>
+  </div>`;
+  // 액션 버튼
   const actionBtns=actions.length?`<div class="action-btns">${actions.map(a=>`<button class="act-btn ${a.cls}" onclick="event.stopPropagation();updateStatus('${pid}','${a.next}',this)">${a.label}</button>`).join('')}</div>`:'';
-  // Show date+time editor for 면접예정/면접완료/면접대기 (always, even if no date set)
-  const showTimeEditor=['면접예정','면접완료','면접대기'].includes(s);
-  const pidClean=pid.replace(/-/g,'');
-  const timeRow=showTimeEditor?`<div class="time-row" onclick="event.stopPropagation()">
+  // 날짜 수정
+  const showTE=['면접예정','면접완료','면접대기'].includes(s);
+  const timeRow=showTE?`<div class="time-row" onclick="event.stopPropagation()">
     <span class="info-icon">📅</span>
-    <input class="time-input" type="date" value="${intv}" id="di_${pidClean}" placeholder="날짜">
+    <input class="time-input" type="date" value="${intv}" id="di_${pidClean}">
     <input class="time-input" type="time" value="${intvTime}" id="ti_${pidClean}">
     <button class="time-save-btn" onclick="saveDateTime('${pid}',document.getElementById('di_${pidClean}'),document.getElementById('ti_${pidClean}'),this)">저장</button>
   </div>`:'';
+  // 추가 정보 (접기)
+  const hasExtra=row['학력']||row['강점']||row['우려사항감점요인']||row['면접관']||row['url'];
   return `<div class="card${isOpen?' open':''}" style="--sc:${m.dot}" onclick="toggleCard(${i})">
     <div class="card-inner">
       <div class="card-head">
         <div class="avatar" style="background:${av}">${esc(name.slice(0,1))}</div>
-        <div><div class="card-name">${esc(name)}</div><div class="card-sub">${ageStr?ageStr+' · ':''}${esc(row['지원직무']||'-')}</div></div>
+        <div style="flex:1;min-width:0">
+          <div class="card-name">${esc(name)}</div>
+          <div class="card-sub">${ageStr?ageStr+' · ':''}${esc(row['지원직무']||'-')}${row['연락처']?' · '+esc(row['연락처']):''}</div>
+        </div>
         <span class="badge" style="background:${m.bg};color:${m.color}">${esc(s)}</span>
       </div>
+      ${dateBanner}
+      ${evalBox}
+      ${timeRow}
       ${actionBtns}
-      <div class="info-list">
-        <div class="info-row"><span class="info-icon">📍</span>${esc(row['지원매장']||'-')}</div>
-        ${intv?`<div class="info-row"><span class="info-icon">📅</span>면접 ${intv}${intvTime?' '+intvTime:''}</div>`:''}
-        ${timeRow}
-        ${row['면접관']?`<div class="info-row"><span class="info-icon">👤</span>${esc(row['면접관'])}</div>`:''}
-        ${row['연락처']?`<div class="info-row"><span class="info-icon">📞</span>${esc(row['연락처'])}</div>`:''}
-      </div>
       <div class="card-foot">
-        ${score!=null?starsHTML(score):'<span style="color:#2d3148;font-size:11px">평가 없음</span>'}
-        <span class="chevron">▼</span>
+        ${score!=null?starsHTML(score):'<span style="color:var(--muted);font-size:11px">점수 없음</span>'}
+        ${hasExtra?`<span class="chevron">${isOpen?'▲':'▼'}</span>`:''}
       </div>
     </div>
-    <div class="detail">
+    ${hasExtra?`<div class="detail">
       <div class="detail-grid">
-        ${df('학력',row['학력'])}${df('생년월일',birth)}
-        ${df('이메일',row['이메일'])}${df('면접일',intv)}
-        ${intv?df('면접관',row['면접관']):''}
+        ${df('학력',row['학력'])}${df('면접관',row['면접관'])}
         ${df('강점',row['강점'],true)}
         ${df('우려사항',row['우려사항감점요인'],true)}
-        ${df('경력요약',row['경력이력서요약'],true)}
       </div>
       ${row['url']?`<a class="notion-btn" href="${row['url']}" target="_blank">📋 노션에서 열기</a>`:''}
-    </div>
+    </div>`:''}
   </div>`;
 }
 
@@ -726,6 +755,28 @@ async function resignEmployee(pid,name,btn){
   }
 }
 
+
+async function saveEval(pageId,el){
+  if(!pageId) return;
+  const text=el.value;
+  if(el.dataset.last===text) return;
+  el.dataset.last=text;
+  el.classList.add('saving');
+  try{
+    const r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({pageId,field:'경력이력서요약',value:text})});
+    const d=await r.json();
+    if(!r.ok||d.error) throw new Error(d.error||'Error');
+    toast('✓ 평가 저장됨');
+    const rec=rows.find(r=>r.id===pageId);
+    if(rec) rec['경력이력서요약']=text;
+    el.classList.remove('saving');el.classList.add('saved');
+    setTimeout(()=>el.classList.remove('saved'),1500);
+  }catch(e){
+    toast('저장 실패: '+e.message,'err');
+    el.classList.remove('saving');
+  }
+}
 
 loadData();
 setInterval(()=>{renderEmployees();renderFormerEmployees();},60000);
