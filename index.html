@@ -214,7 +214,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
       <!-- 기본 정보 -->
       <div class="form-row">
         <div class="form-group"><label>이름 *</label><input type="text" id="f_name" placeholder="홍길동"></div>
-        <div class="form-group"><label>생년월일</label><input type="text" id="f_birth" placeholder="예: 1997-01-25 또는 970125"></div>
+        <div class="form-group"><label>생년월일</label><input type="text" id="f_birth" placeholder="예: 1997 (연도만)"></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label>연락처</label><input type="tel" id="f_phone" placeholder="010-0000-0000"></div>
@@ -223,7 +223,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
       <div class="form-row">
         <div class="form-group"><label>학력</label><input type="text" id="f_edu" placeholder="예: 인천고 졸업"></div>
         <div class="form-group"><label>초기 상태</label>
-          <select id="f_status">
+          <select id="f_status" onchange="document.getElementById('f_ivrow').style.display=this.value==='면접예정'?'grid':'none'">
             <option value="서류접수">서류접수</option>
             <option value="서류합격">서류합격</option>
             <option value="면접대기">면접대기</option>
@@ -231,6 +231,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
             <option value="면접완료">면접완료</option>
           </select>
         </div>
+      </div>
+      <div class="form-row" id="f_ivrow" style="display:none">
+        <div class="form-group"><label>면접 예정일</label><input type="date" id="f_ivdate"></div>
+        <div class="form-group"><label>시간</label><input type="time" id="f_ivtime"></div>
       </div>
       <div class="form-group"><label>경력 / 면접 메모</label><textarea id="f_memo" placeholder="경력사항, 첫 인상, 면접 전 메모..."></textarea></div>
     </div>
@@ -636,6 +640,9 @@ function openModal(){
     if(el) el.value='';
   });
   document.getElementById('f_status').value='서류접수';
+  document.getElementById('f_ivrow').style.display='none';
+  document.getElementById('f_ivdate').value='';
+  document.getElementById('f_ivtime').value='';
   document.getElementById('imgPreviewWrap').style.display='none';
   document.getElementById('imgPlaceholder').style.display='block';
   document.getElementById('imgZone').classList.remove('has-img');
@@ -654,7 +661,7 @@ async function submitAddApplicant(){
   btn.disabled=true;btn.textContent='등록 중...';
   try{
     let bv=document.getElementById('f_birth').value.trim();
-    if(bv){const dg=bv.replace(/[^0-9]/g,'');if(dg.length===8)bv=dg.slice(0,4)+'-'+dg.slice(4,6)+'-'+dg.slice(6);else if(dg.length===6)bv=((+dg.slice(0,2))>30?'19':'20')+dg.slice(0,2)+'-'+dg.slice(2,4)+'-'+dg.slice(4);else if(!/^\d{4}-\d{2}-\d{2}$/.test(bv))bv='';}
+    if(bv){const dg=bv.replace(/[^0-9]/g,'');if(dg.length===8)bv=dg.slice(0,4)+'-'+dg.slice(4,6)+'-'+dg.slice(6);else if(dg.length===6)bv=((+dg.slice(0,2))>30?'19':'20')+dg.slice(0,2)+'-'+dg.slice(2,4)+'-'+dg.slice(4);else if(dg.length===4)bv=dg+'-01-01';else if(dg.length===2)bv=((+dg)>30?'19':'20')+dg+'-01-01';else if(!/^\d{4}-\d{2}-\d{2}$/.test(bv))bv='';}
     const body={
       '이름':name,
       '생년월일':bv||null,
@@ -669,6 +676,10 @@ async function submitAddApplicant(){
     const d=await r.json();
     if(!r.ok||d.error)throw new Error(d.error||'Error');
     const newId=d.id;
+    const ivd=document.getElementById('f_ivdate').value,ivt=document.getElementById('f_ivtime').value;
+    if(ivd&&newId){
+      try{await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pageId:newId,field:'면접일',value:ivt?ivd+'T'+ivt+':00+09:00':ivd})});}catch(e){}
+    }
     // 이미지 있으면 GitHub에 영구저장
     if(_imgBase64&&newId){
       btn.textContent='이미지 저장 중...';
