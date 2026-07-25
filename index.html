@@ -306,6 +306,7 @@ async function loadData(){
   btn.disabled=false;btn.textContent='↻ 새로고침';
   document.getElementById('loadingEl').style.display='none';
   document.getElementById('mainContent').style.display='block';
+  if(!window._fltInit){window._fltInit=1;if(rows.some(r=>r['진행상태']==='면접예정'))flt='면접예정';}
   renderAll();
 }
 
