@@ -318,13 +318,13 @@ function renderStats(){
   document.getElementById('stats').innerHTML=`
     <div class="stat-card"><div class="stat-label">총 지원자</div><div class="stat-num">${applicants}</div></div>
     <div class="stat-card accent"><div class="stat-label">진행 중</div><div class="stat-num">${inP}</div></div>
-    <div class="stat-card green"><div class="stat-label">재직중</div><div class="stat-num">${cnt('최종합격')}</div></div>
+    <div class="stat-card green"><div class="stat-label">재직중</div><div class="stat-num">${rows.filter(r=>r['진행상태']==='최종합격'&&!r['퇴사일']).length}</div></div>
     <div class="stat-card red"><div class="stat-label">불합격</div><div class="stat-num">${cnt('불합격')}</div></div>`;
 }
 
 // ===== EMPLOYEES =====
 function renderEmployees(){
-  const emps=rows.filter(r=>r['진행상태']==='최종합격');
+  const emps=rows.filter(r=>r['진행상태']==='최종합격'&&!r['퇴사일']);
   emps.sort((a,b)=>{const da=a['입사일'],db=b['입사일'];if(!da&&!db)return 0;if(!da)return 1;if(!db)return -1;return da<db?-1:da>db?1:0;});
   const sec=document.getElementById('empSection'),div=document.getElementById('empDivider');
   if(!emps.length){sec.style.display='none';div.style.display='none';return;}
@@ -341,9 +341,26 @@ function renderEmployees(){
         ${ten?`<div class="emp-tenure">${ten}</div>`:''}
       </div>
       ${r['입사일']?`<div class="emp-hire">📅 입사 ${r['입사일'].substring(0,10)}</div>`:''}
-      <div class="emp-detail">${r['연락처']?esc(r['연락처']):'-'}</div>
+      <div class="emp-detail">${r['연락처']?esc(r['연락처']):'-'}<div style="margin-top:8px;text-align:right"><button class="del-btn" onclick="retireEmp('${r.id}','${esc(r['이름']||'')}',event)">퇴사 처리</button></div></div>
     </div>`;
   }).join('');
+}
+async function retireEmp(pageId,name,e){
+  e.stopPropagation();
+  if(!confirm(name+' 님을 퇴사 처리하시겠습니까? (오늘 날짜로 퇴사일 기록)'))return;
+  const t=new Date(),pad=n=>String(n).padStart(2,'0');
+  const d=t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate());
+  try{
+    const r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({pageId,field:'퇴사일',value:d})});
+    const dd=await r.json();
+    if(!r.ok||dd.error)throw new Error(dd.error||'Error');
+    toast('✓ 퇴사 처리 완료 ('+d+')');
+    const rec=rows.find(x=>x.id===pageId);
+    if(rec) rec['퇴사일']=d;
+    empOpenIdx=null;
+    renderAll();
+  }catch(err){toast('퇴사 처리 실패: '+err.message,'err');}
 }
 function toggleEmp(i){empOpenIdx=empOpenIdx===i?null:i;renderEmployees();}
 
