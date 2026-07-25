@@ -1,6 +1,26 @@
 {
   "results": [
     {
+      "id": "3a80c265-4529-8175-9b3e-ea7ece33ed85",
+      "url": "https://app.notion.com/p/2-3a80c265452981759b3eea7ece33ed85",
+      "이름": "2",
+      "연락처": null,
+      "이메일": null,
+      "지원직무": null,
+      "지원매장": null,
+      "학력": null,
+      "진행상태": "서류접수",
+      "면접관": null,
+      "평가점수": null,
+      "강점": null,
+      "우려사항감점요인": null,
+      "경력이력서요약": null,
+      "생년월일": null,
+      "면접일": null,
+      "입사일": null,
+      "createdTime": "2026-07-25T06:09:00.000Z"
+    },
+    {
       "id": "3a70c265-4529-81d8-90f9-ee621fad539f",
       "url": "https://app.notion.com/p/3a70c265452981d890f9ee621fad539f",
       "이름": "김하영",
@@ -441,5 +461,5 @@
       "createdTime": "2026-07-21T03:26:00.000Z"
     }
   ],
-  "updated": "2026-07-25T06:08:55.064Z"
+  "updated": "2026-07-25T06:09:17.679Z"
 }
