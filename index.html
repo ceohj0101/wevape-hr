@@ -325,6 +325,7 @@ function renderStats(){
 // ===== EMPLOYEES =====
 function renderEmployees(){
   const emps=rows.filter(r=>r['진행상태']==='최종합격');
+  emps.sort((a,b)=>{const da=a['입사일'],db=b['입사일'];if(!da&&!db)return 0;if(!da)return 1;if(!db)return -1;return da<db?-1:da>db?1:0;});
   const sec=document.getElementById('empSection'),div=document.getElementById('empDivider');
   if(!emps.length){sec.style.display='none';div.style.display='none';return;}
   sec.style.display='block';div.style.display='block';
