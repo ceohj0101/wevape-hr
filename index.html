@@ -256,6 +256,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
   </div>
 </div>
 
+<input type="file" id="attachFileInput" accept="image/*" style="display:none" onchange="handleAttachUpload(event)">
 <div id="toast"></div>
 
 <script>
@@ -468,7 +469,7 @@ function cardHTML(row,i){
           <div class="card-sub">${ageStr?ageStr+' · ':''}${esc(row['지원직무']||'-')}${row['연락처']?' · '+esc(row['연락처']):''}</div>
         </div>
         <span class="badge" style="background:${m.bg};color:${m.color}">${esc(s)}</span>
-        ${imgUrl?`<button class="resume-btn" onclick="event.stopPropagation();showResumeImg('${pidClean}','${imgUrl}')">🖼 이력서</button>`:''}
+        ${imgUrl?`<button class="resume-btn" onclick="event.stopPropagation();showResumeImg('${pidClean}','${imgUrl}')">🖼 이력서</button>`:`<button class="resume-btn" onclick="attachResume('${pid}',event)">📎 사진</button>`}
       </div>
       ${dateBanner}
       ${evalBox}
@@ -706,6 +707,34 @@ async function submitAddApplicant(){
     await loadData();
   }catch(e){toast('등록 실패: '+e.message,'err');}
   finally{btn.disabled=false;btn.textContent='등록하기';}
+}
+
+// ===== ATTACH RESUME (기존 지원자) =====
+let _attachPid=null;
+function attachResume(pid,e){e.stopPropagation();_attachPid=pid;document.getElementById('attachFileInput').click();}
+async function handleAttachUpload(e){
+  const file=e.target.files[0];e.target.value='';
+  if(!file||!_attachPid)return;
+  const pid=_attachPid;_attachPid=null;
+  const reader=new FileReader();
+  reader.onload=async ev=>{
+    const dataUrl=ev.target.result;
+    const b64=dataUrl.split(',')[1];
+    toast('이미지 업로드 중...');
+    try{
+      const r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({action:'upload-image',pageId:pid,imageBase64:b64})});
+      const d=await r.json();
+      if(!r.ok||d.error||!d.ok)throw new Error(d.error||'Error');
+      const clean=pid.replace(/-/g,'');
+      localStorage.setItem('img_'+clean,dataUrl);
+      const rec=rows.find(x=>x.id===pid);
+      if(rec&&d.url) rec['이력서사진']=d.url;
+      toast('✓ 이력서 사진 저장됨');
+      renderCards();
+    }catch(err){toast('업로드 실패: '+err.message,'err');}
+  };
+  reader.readAsDataURL(file);
 }
 
 // ===== LIGHTBOX =====
