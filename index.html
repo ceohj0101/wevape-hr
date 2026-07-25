@@ -240,7 +240,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
           </select>
         </div>
       </div>
-      <div class="form-group"><label>경�% / 면접 메모</label><textarea id="f_memo" placeholder="경력사항, 첫 인상, 면접 전 메모..."></textarea></div>
+      <div class="form-group"><label>경력 / 면접 메모</label><textarea id="f_memo" placeholder="경력사항, 첫 인상, 면접 전 메모..."></textarea></div>
     </div>
     <div class="modal-footer">
       <button class="submit-btn" id="submitBtn" onclick="submitAddApplicant()">등록하기</button>
@@ -252,7 +252,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 <div id="resumeLightbox" style="display:none" onclick="if(event.target===this)closeLightbox()">
   <div class="lb-inner">
     <button class="lb-close" onclick="closeLightbox()">✕</button>
-    <img id="lbImg" class="lb-img" src="" alt="이력석">
+    <img id="lbImg" class="lb-img" src="" alt="이력서">
   </div>
 </div>
 
@@ -282,7 +282,7 @@ const STAGE_ACTIONS = {
 const AV=['#6366f1','#8b5cf6','#ec4899','#0ea5e9','#f97316','#22c55e','#a855f7','#14b8a6','#f59e0b'];
 let rows=[], flt='all', openIdx=null, empOpenIdx=null, _imgBase64=null, _imgOrigUrl=null;
 
-// ===== DATAh =====
+// ===== DATA =====
 async function loadData(){
   const btn=document.getElementById('reloadBtn');
   btn.disabled=true;btn.textContent='...';
@@ -292,16 +292,16 @@ async function loadData(){
   document.getElementById('pipeline').innerHTML='';
   try{
     const r=await fetch(WORKER+'?_='+Date.now());
-    if(!r.ok) throw new Error('HTTP '+fr.status);
+    if(!r.ok) throw new Error('HTTP '+r.status);
     const d=await r.json();
     rows=d.records||[];
     if(d.updatedAt){
       const t=new Date(d.updatedAt).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
-      document.getElementById('lastUpdate').textContent=t+' 업獰이트';
+      document.getElementById('lastUpdate').textContent=t+' 업데이트';
     }
   }catch(e){
     rows=[];
-    showError('⚩️ 憜孡색 : '+e.message);
+    showError('⚠️ 로드 실패: '+e.message);
   }
   btn.disabled=false;btn.textContent='↻ 새로고침';
   document.getElementById('loadingEl').style.display='none';
@@ -324,18 +324,18 @@ function renderStats(){
   const inP=cnt('서류접수')+cnt('서류합격')+cnt('면접대기')+cnt('면접예정')+cnt('면접완료');
   document.getElementById('stats').innerHTML=`
     <div class="stat-card"><div class="stat-label">총 지원자</div><div class="stat-num">${applicants}</div></div>
-    <div class="stat-card accent"><div class="stat-label">진행 ϑ䁐</div><div class="stat-num">${inP}</div></div>
-    <div class="stat-card green"><div class="stat-label">재직���</div><div class="stat-num">${cnt('최종합격')}</div></div>
+    <div class="stat-card accent"><div class="stat-label">진행 중</div><div class="stat-num">${inP}</div></div>
+    <div class="stat-card green"><div class="stat-label">재직중</div><div class="stat-num">${cnt('최종합격')}</div></div>
     <div class="stat-card red"><div class="stat-label">불합격</div><div class="stat-num">${cnt('불합격')}</div></div>`;
 }
 
-// ===== EMPFLOYEES =====
+// ===== EMPLOYEES =====
 function renderEmployees(){
   const emps=rows.filter(r=>r['진행상태']==='최종합격');
   const sec=document.getElementById('empSection'),div=document.getElementById('empDivider');
   if(!emps.length){sec.style.display='none';div.style.display='none';return;}
   sec.style.display='block';div.style.display='block';
-  document.getElementById('empCnt').textContent=emps.length+'憝瓩';
+  document.getElementById('empCnt').textContent=emps.length+'명';
   document.getElementById('empGrid').innerHTML=emps.map((r,i)=>{
     const ten=r['입사일']?tenure(r['입사일']):'';
     const isOpen=empOpenIdx===i;
@@ -343,10 +343,10 @@ function renderEmployees(){
       <div class="emp-card-head">
         <div class="emp-avatar">${esc((r['이름']||'?').slice(0,1))}</div>
         <div><div class="emp-name">${esc(r['이름']||'')}</div>
-        <div class="emp-role">${esc(r['지원직���'||'')}${r['지원매장']?' · '+esc(r['지원매장']):''}</div></div>
+        <div class="emp-role">${esc(r['지원직무']||'')}${r['지원매장']?' · '+esc(r['지원매장']):''}</div></div>
         ${ten?`<div class="emp-tenure">${ten}</div>`:''}
       </div>
-      ${r['입사일']?`<div class="emp-hire">📅 입쎬일 �`�앿 ${r['잆사일'].substring(0,10)}</div>`:''}
+      ${r['입사일']?`<div class="emp-hire">📅 입사 ${r['입사일'].substring(0,10)}</div>`:''}
       <div class="emp-detail">${r['연락처']?esc(r['연락처']):'-'}</div>
     </div>`;
   }).join('');
@@ -604,7 +604,7 @@ function processImgFile(file){
     };
     img.src=originalDataUrl;
   };
-  reader.readAsDataURL vile);
+  reader.readAsDataURL(file);
 }
 async function analyzeImg(b64){
   const status=document.getElementById('imgAiStatus');
