@@ -217,11 +217,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
         <div class="form-group"><label>생년월일</label><input type="text" id="f_birth" placeholder="예: 1997 (연도만)"></div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>연락처</label><input type="tel" id="f_phone" placeholder="010-0000-0000"></div>
-        <div class="form-group"><label>이메일</label><input type="email" id="f_email" placeholder="abc@email.com"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>학력</label><input type="text" id="f_edu" placeholder="예: 인천고 졸업"></div>
         <div class="form-group"><label>초기 상태</label>
           <select id="f_status" onchange="document.getElementById('f_ivrow').style.display=this.value==='면접예정'?'grid':'none'">
             <option value="서류접수">서류접수</option>
@@ -236,7 +231,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
         <div class="form-group"><label>면접 예정일</label><input type="date" id="f_ivdate"></div>
         <div class="form-group"><label>시간</label><input type="time" id="f_ivtime"></div>
       </div>
-      <div class="form-group"><label>경력 / 면접 메모</label><textarea id="f_memo" placeholder="경력사항, 첫 인상, 면접 전 메모..."></textarea></div>
+      <div class="form-group"><label>지원자 주요 포인트</label><textarea id="f_memo" placeholder="핵심 경력, 인상, 특이사항..."></textarea></div>
     </div>
     <div class="modal-footer">
       <button class="submit-btn" id="submitBtn" onclick="submitAddApplicant()">등록하기</button>
@@ -617,9 +612,6 @@ async function analyzeImg(b64){
       const fd=d.data;
       if(fd['이름']) document.getElementById('f_name').value=fd['이름'];
       if(fd['생년월일']) document.getElementById('f_birth').value=fd['생년월일'];
-      if(fd['연락처']) document.getElementById('f_phone').value=fd['연락처'];
-      if(fd['이메일']) document.getElementById('f_email').value=fd['이메일'];
-      if(fd['학력']) document.getElementById('f_edu').value=fd['학력'];
       if(fd['경력이력서요약']) document.getElementById('f_memo').value=fd['경력이력서요약'];
       status.textContent='✓ AI 자동입력 완료 ('+( d.source||'AI')+')', status.className='img-ai-status done';
     }else{
@@ -635,7 +627,7 @@ function openModal(){
   document.getElementById('addModal').style.display='flex';
   document.body.style.overflow='hidden';
   _imgBase64=null;_imgOrigUrl=null;_imgForAI=null;
-  ['f_name','f_birth','f_phone','f_email','f_edu','f_memo'].forEach(id=>{
+  ['f_name','f_birth','f_memo'].forEach(id=>{
     const el=document.getElementById(id);
     if(el) el.value='';
   });
@@ -665,9 +657,6 @@ async function submitAddApplicant(){
     const body={
       '이름':name,
       '생년월일':bv||null,
-      '연락처':document.getElementById('f_phone').value.trim()||null,
-      '이메일':document.getElementById('f_email').value.trim()||null,
-      '학력':document.getElementById('f_edu').value.trim()||null,
       '경력이력서요약':document.getElementById('f_memo').value.trim()||null,
       '채용단계':document.getElementById('f_status').value||'서류접수',
       action:'create'
