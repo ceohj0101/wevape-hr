@@ -393,6 +393,8 @@ function renderCards(){
   if(flt!=='all') base=base.filter(r=>r['진행상태']===flt);
   // 면접일 기준 오름차순 정렬 (null 뒤로)
   base.sort((a,b)=>{
+    const pa=a['진행상태']==='면접예정'?0:1,pb=b['진행상태']==='면접예정'?0:1;
+    if(pa!==pb)return pa-pb;
     const da=a['면접일'],db=b['면접일'];
     if(!da&&!db)return 0;if(!da)return 1;if(!db)return -1;
     return da<db?-1:da>db?1:0;
