@@ -421,7 +421,7 @@ function cardHTML(row,i){
     const diff=Math.round((new Date(intv+'T00:00:00')-today)/864e5);
     const dday=diff===0?'D-Day':diff>0?'D-'+diff:'D+'+Math.abs(diff);
     const ddayCls=diff<0?'past':diff===0?'today':'';
-    dateBanner=`<div class="card-date-banner${ddayCls==='today'?' today':''}">
+    dateBanner=`<div class="card-date-banner${ddayCls==='today'?' today':''}" style="cursor:pointer" title="클릭하면 날짜 변경" onclick="event.stopPropagation();openIvPicker('${pidClean}')">
       <div class="card-date-main">${d.getMonth()+1}월 ${d.getDate()}일 (${days[d.getDay()]})${intvTime?' · '+intvTime:''}</div>
       <span class="card-dday ${ddayCls}">${dday}</span>
     </div>`;
@@ -442,9 +442,9 @@ function cardHTML(row,i){
   const showTE=true;
   const timeRow=showTE?`<div class="time-row" onclick="event.stopPropagation()">
     <span style="font-size:12px">📅</span>
-    <input class="time-input" type="date" value="${intv}" id="di_${pidClean}">
-    <input class="time-input" type="time" value="${intvTime}" id="ti_${pidClean}">
-    <button class="time-save-btn" onclick="saveDateTime('${pid}',document.getElementById('di_${pidClean}'),document.getElementById('ti_${pidClean}'),this)">저장</button>
+    <input class="time-input" type="date" value="${intv}" id="di_${pidClean}" onchange="saveDateTime('${pid}',this,document.getElementById('ti_${pidClean}'),document.getElementById('tsb_${pidClean}'))">
+    <input class="time-input" type="time" value="${intvTime}" id="ti_${pidClean}" onchange="saveDateTime('${pid}',document.getElementById('di_${pidClean}'),this,document.getElementById('tsb_${pidClean}'))">
+    <button class="time-save-btn" id="tsb_${pidClean}" onclick="saveDateTime('${pid}',document.getElementById('di_${pidClean}'),document.getElementById('ti_${pidClean}'),this)">저장</button>
   </div>`:'';
 
   // 액션 버튼
@@ -483,6 +483,13 @@ function cardHTML(row,i){
       ${row['url']?`<a class="notion-btn" href="${row['url']}" target="_blank">📋 노션에서 열기</a>`:''}
     </div>`:''}
   </div>`;
+}
+
+function openIvPicker(pidClean){
+  const el=document.getElementById('di_'+pidClean);
+  if(!el)return;
+  el.scrollIntoView({block:'center',behavior:'smooth'});
+  try{el.showPicker();}catch(e){el.focus();}
 }
 
 // ===== DELETE =====
