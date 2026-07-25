@@ -214,25 +214,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
       <!-- 기본 정보 -->
       <div class="form-row">
         <div class="form-group"><label>이름 *</label><input type="text" id="f_name" placeholder="홍길동"></div>
-        <div class="form-group"><label>생년월일</label><input type="date" id="f_birth"></div>
+        <div class="form-group"><label>생년월일</label><input type="text" id="f_birth" placeholder="예: 1997-01-25 또는 970125"></div>
       </div>
       <div class="form-row">
         <div class="form-group"><label>연락처</label><input type="tel" id="f_phone" placeholder="010-0000-0000"></div>
         <div class="form-group"><label>이메일</label><input type="email" id="f_email" placeholder="abc@email.com"></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>지원직무</label>
-          <select id="f_job">
-            <option value="">선택</option>
-            <option>판매직</option><option>매장관리</option><option>알바</option><option>기타</option>
-          </select>
-        </div>
-        <div class="form-group"><label>지원매장</label>
-          <select id="f_store">
-            <option value="">선택</option>
-            <option>구월점</option><option>연수점</option><option>논현점</option><option>인천논현점</option><option>기타</option>
-          </select>
-        </div>
       </div>
       <div class="form-row">
         <div class="form-group"><label>학력</label><input type="text" id="f_edu" placeholder="예: 인천고 졸업"></div>
@@ -630,11 +616,6 @@ async function analyzeImg(b64){
       if(fd['연락처']) document.getElementById('f_phone').value=fd['연락처'];
       if(fd['이메일']) document.getElementById('f_email').value=fd['이메일'];
       if(fd['학력']) document.getElementById('f_edu').value=fd['학력'];
-      if(fd['지원직무']){
-        const sel=document.getElementById('f_job');
-        const opt=[...sel.options].find(o=>o.value===fd['지원직무']);
-        if(opt) sel.value=fd['지원직무'];
-      }
       if(fd['경력이력서요약']) document.getElementById('f_memo').value=fd['경력이력서요약'];
       status.textContent='✓ AI 자동입력 완료 ('+( d.source||'AI')+')', status.className='img-ai-status done';
     }else{
@@ -654,8 +635,6 @@ function openModal(){
     const el=document.getElementById(id);
     if(el) el.value='';
   });
-  document.getElementById('f_job').value='';
-  document.getElementById('f_store').value='';
   document.getElementById('f_status').value='서류접수';
   document.getElementById('imgPreviewWrap').style.display='none';
   document.getElementById('imgPlaceholder').style.display='block';
@@ -674,14 +653,14 @@ async function submitAddApplicant(){
   const btn=document.getElementById('submitBtn');
   btn.disabled=true;btn.textContent='등록 중...';
   try{
+    let bv=document.getElementById('f_birth').value.trim();
+    if(bv){const dg=bv.replace(/[^0-9]/g,'');if(dg.length===8)bv=dg.slice(0,4)+'-'+dg.slice(4,6)+'-'+dg.slice(6);else if(dg.length===6)bv=((+dg.slice(0,2))>30?'19':'20')+dg.slice(0,2)+'-'+dg.slice(2,4)+'-'+dg.slice(4);else if(!/^\d{4}-\d{2}-\d{2}$/.test(bv))bv='';}
     const body={
       '이름':name,
-      '생년월일':document.getElementById('f_birth').value||null,
+      '생년월일':bv||null,
       '연락처':document.getElementById('f_phone').value.trim()||null,
       '이메일':document.getElementById('f_email').value.trim()||null,
       '학력':document.getElementById('f_edu').value.trim()||null,
-      '지원직무':document.getElementById('f_job').value||null,
-      '지원매장':document.getElementById('f_store').value||null,
       '경력이력서요약':document.getElementById('f_memo').value.trim()||null,
       '채용단계':document.getElementById('f_status').value||'서류접수',
       action:'create'
