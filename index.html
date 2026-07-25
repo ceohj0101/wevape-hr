@@ -439,7 +439,7 @@ function cardHTML(row,i){
   </div>`;
 
   // 날짜/시간 입력
-  const showTE=['면접예정','면접완료','면접대기'].includes(s);
+  const showTE=true;
   const timeRow=showTE?`<div class="time-row" onclick="event.stopPropagation()">
     <span style="font-size:12px">📅</span>
     <input class="time-input" type="date" value="${intv}" id="di_${pidClean}">
@@ -529,6 +529,7 @@ async function saveDateTime(pageId,dateEl,timeEl,btn){
   if(!pageId)return;
   const dv=dateEl.value,tv=timeEl.value;
   if(!dv){toast('날짜를 선택해주세요','err');return;}
+  if(+dv.slice(0,4)<2020){toast('연도를 확인해주세요: '+dv,'err');return;}
   const val=tv?dv+'T'+tv+':00+09:00':dv;
   btn.textContent='...';btn.disabled=true;
   try{
@@ -649,6 +650,8 @@ function closeModal(){
 async function submitAddApplicant(){
   const name=document.getElementById('f_name').value.trim();
   if(!name){toast('이름을 입력해주세요','err');return;}
+  const _ivd=document.getElementById('f_ivdate').value;
+  if(_ivd&&+_ivd.slice(0,4)<2020){toast('면접 예정일 연도를 확인해주세요: '+_ivd,'err');return;}
   const btn=document.getElementById('submitBtn');
   btn.disabled=true;btn.textContent='등록 중...';
   try{
