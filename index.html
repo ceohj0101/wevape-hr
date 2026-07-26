@@ -92,7 +92,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .time-save-btn{background:var(--accent);border:none;color:#1a1000;border-radius:7px;padding:5px 10px;font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap;transition:background .15s}
 .time-save-btn:hover{background:var(--accent2)}
 .action-btns{display:flex;gap:6px;padding:0 12px;margin-bottom:8px}
-.act-btn{flex:1;padding:7px 0;border-radius:8px;border:1.5px solid;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:.03em;transition:opacity .15s}
+.act-btn{flex:1;min-width:0;padding:7px 0;border-radius:8px;border:1.5px solid;font-size:11px;font-weight:800;cursor:pointer;letter-spacing:.03em;transition:opacity .15s}
 .act-btn:hover{opacity:.8}
 .act-btn.pass{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.4);color:#15803d}
 .act-btn.fail{background:rgba(220,38,38,.07);border-color:rgba(220,38,38,.3);color:#dc2626}
@@ -265,11 +265,13 @@ const FSM = {color:'#64748b',bg:'rgba(100,116,139,.12)',dot:'#94a3b8'};
 const PIPELINE = ['서류접수','서류합격','면접대기','면접예정','면접완료'];
 const STAGE_ACTIONS = {
   '서류접수':[{label:'서류합격 →',next:'서류합격',cls:'pass'},{label:'면접대기 →',next:'면접대기',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
-  '서류합격':[{label:'면접대기 →',next:'면접대기',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
-  '면접대기':[{label:'면접예정 →',next:'면접예정',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
-  '면접예정':[{label:'면접완료 →',next:'면접완료',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
-  '면접완료':[{label:'✓ 최종합격',next:'최종합격',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
+  '서류합격':[{label:'↩',next:'서류접수',cls:'retry'},{label:'면접대기 →',next:'면접대기',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
+  '면접대기':[{label:'↩',next:'서류합격',cls:'retry'},{label:'면접예정 →',next:'면접예정',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
+  '면접예정':[{label:'↩',next:'면접대기',cls:'retry'},{label:'면접완료 →',next:'면접완료',cls:'pass'},{label:'불참',next:'불참',cls:'fail'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
+  '면접완료':[{label:'↩',next:'면접예정',cls:'retry'},{label:'✓ 최종합격',next:'최종합격',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
   '불합격':[{label:'↺ 재검토',next:'서류접수',cls:'retry'}],
+  '불참':[{label:'↺ 재검토',next:'면접대기',cls:'retry'}],
+  '콜백없음':[{label:'↺ 재검토',next:'서류접수',cls:'retry'}],
 };
 const AV=['#6366f1','#8b5cf6','#ec4899','#0ea5e9','#f97316','#22c55e','#a855f7','#14b8a6','#f59e0b'];
 let rows=[], flt='all', openIdx=null, empOpenIdx=null, _imgBase64=null, _imgOrigUrl=null;
