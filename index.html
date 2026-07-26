@@ -263,6 +263,8 @@ const SM = {
 };
 const FSM = {color:'#64748b',bg:'rgba(100,116,139,.12)',dot:'#94a3b8'};
 const PIPELINE = ['서류접수','서류합격','면접대기','면접예정','면접완료'];
+const REJ=['불합격','불참','콜백없음'];
+const cntRej=()=>rows.filter(r=>REJ.includes(r['진행상태'])).length;
 const STAGE_ACTIONS = {
   '서류접수':[{label:'서류합격 →',next:'서류합격',cls:'pass'},{label:'면접대기 →',next:'면접대기',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
   '서류합격':[{label:'↩',next:'서류접수',cls:'retry'},{label:'면접대기 →',next:'면접대기',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
@@ -321,7 +323,7 @@ function renderStats(){
     <div class="stat-card"><div class="stat-label">총 지원자</div><div class="stat-num">${applicants}</div></div>
     <div class="stat-card accent"><div class="stat-label">진행 중</div><div class="stat-num">${inP}</div></div>
     <div class="stat-card green"><div class="stat-label">재직중</div><div class="stat-num">${rows.filter(r=>r['진행상태']==='최종합격'&&!r['퇴사일']).length}</div></div>
-    <div class="stat-card red"><div class="stat-label">불합격</div><div class="stat-num">${cnt('불합격')}</div></div>`;
+    <div class="stat-card red"><div class="stat-label">불합격·불참</div><div class="stat-num">${cntRej()}</div></div>`;
 }
 
 // ===== EMPLOYEES =====
@@ -368,7 +370,7 @@ function toggleEmp(i){empOpenIdx=empOpenIdx===i?null:i;renderEmployees();}
 
 // ===== PIPELINE =====
 function renderPipeline(){
-  const rej=cnt('불합격');
+  const rej=cntRej();
   let h=PIPELINE.map((s,i)=>{
     const m=SM[s];
     return (i?'<span class="pipe-arrow">›</span>':'')+
@@ -390,9 +392,10 @@ function renderFilters(){
   const base=rows.filter(r=>r['진행상태']!=='최종합격');
   let h=`<div class="chip${flt==='all'?' active':''}" onclick="setFilter('all')">전체 ${base.length}</div>`;
   [...PIPELINE,'불합격'].forEach(s=>{
-    if(!cnt(s))return;
+    const c=s==='불합격'?cntRej():cnt(s);
+    if(!c)return;
     const m=SM[s];
-    h+=`<div class="chip${flt===s?' active':''}" onclick="setFilter('${s}')" style="${flt===s?`border-color:${m.dot};color:${m.color};background:${m.bg}`:`color:${m.color}`}">${s} ${cnt(s)}</div>`;
+    h+=`<div class="chip${flt===s?' active':''}" onclick="setFilter('${s}')" style="${flt===s?`border-color:${m.dot};color:${m.color};background:${m.bg}`:`color:${m.color}`}">${s} ${c}</div>`;
   });
   document.getElementById('filterRow').innerHTML=h;
 }
@@ -403,7 +406,7 @@ function toggleCard(i){openIdx=openIdx===i?null:i;renderCards();}
 // ===== CARDS =====
 function renderCards(){
   let base=rows.filter(r=>r['진행상태']!=='최종합격');
-  if(flt!=='all') base=base.filter(r=>r['진행상태']===flt);
+  if(flt!=='all') base=base.filter(r=>flt==='불합격'?REJ.includes(r['진행상태']):r['진행상태']===flt);
   // 면접일 기준 오름차순 정렬 (null 뒤로)
   base.sort((a,b)=>{
     const pa=a['진행상태']==='면접예정'?0:1,pb=b['진행상태']==='면접예정'?0:1;
