@@ -266,7 +266,7 @@ const PIPELINE = ['서류접수','서류합격','면접대기','면접예정','�
 const REJ=['불합격','불참','콜백없음'];
 const cntRej=()=>rows.filter(r=>REJ.includes(r['진행상태'])).length;
 const STAGE_ACTIONS = {
-  '서류접수':[{label:'서류합격 →',next:'서류합격',cls:'pass'},{label:'면접대기 →',next:'면접대기',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
+  '서류접수':[{label:'서류합격 →',next:'서류합격',cls:'pass'},{label:'면접대기 →',next:'면접대기',cls:'pass'},{label:'연락없음',next:'콜백없음',cls:'fail'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
   '서류합격':[{label:'↩',next:'서류접수',cls:'retry'},{label:'면접대기 →',next:'면접대기',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
   '면접대기':[{label:'↩',next:'서류합격',cls:'retry'},{label:'면접예정 →',next:'면접예정',cls:'pass'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
   '면접예정':[{label:'↩',next:'면접대기',cls:'retry'},{label:'면접완료 →',next:'면접완료',cls:'pass'},{label:'불참',next:'불참',cls:'fail'},{label:'✕ 불합격',next:'불합격',cls:'fail'}],
