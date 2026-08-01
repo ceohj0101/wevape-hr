@@ -344,15 +344,18 @@ function renderEmployees(){
   document.getElementById('empGrid').innerHTML=emps.map((r,i)=>{
     const ten=r['입사일']?tenure(r['입사일']):'';
     const isOpen=empOpenIdx===i;
+    const pid=r['id']||'',pidClean=pid.replace(/-/g,'');
+    const imgUrl=r['이력서사진']||localStorage.getItem('img_'+pidClean);
     return `<div class="emp-card${isOpen?' open':''}" onclick="toggleEmp(${i})">
       <div class="emp-card-head">
         <div class="emp-avatar">${esc((r['이름']||'?').slice(0,1))}</div>
         <div><div class="emp-name">${esc(r['이름']||'')}</div>
         <div class="emp-role">${esc(r['지원직무']||'')}${r['지원매장']?' · '+esc(r['지원매장']):''}</div></div>
+        ${imgUrl?`<button class="resume-btn" onclick="event.stopPropagation();showResumeImg('${pidClean}','${imgUrl}')">🖼</button>`:''}
         ${ten?`<div class="emp-tenure">${ten}</div>`:''}
       </div>
       ${r['입사일']?`<div class="emp-hire">📅 입사 ${r['입사일'].substring(0,10)}</div>`:''}
-      <div class="emp-detail">${r['연락처']?esc(r['연락처']):'-'}<div style="margin-top:8px;text-align:right"><button class="del-btn" onclick="retireEmp('${r.id}','${esc(r['이름']||'')}',event)">퇴사 처리</button></div></div>
+      <div class="emp-detail">${r['연락처']?esc(r['연락처']):'-'}<div style="margin-top:8px;display:flex;gap:6px;align-items:center" onclick="event.stopPropagation()"><span style="font-size:10px;font-weight:700">📅 입사일</span><input class="time-input" type="date" value="${(r['입사일']||'').substring(0,10)}" onchange="saveHireDate('${r.id}',this)"></div><div style="margin-top:8px;text-align:right"><button class="del-btn" onclick="retireEmp('${r.id}','${esc(r['이름']||'')}',event)">퇴사 처리</button></div></div>
     </div>`;
   }).join('');
   if(showRetired&&retired.length){
@@ -383,6 +386,20 @@ async function retireEmp(pageId,name,e){
     empOpenIdx=null;
     renderAll();
   }catch(err){toast('퇴사 처리 실패: '+err.message,'err');}
+}
+async function saveHireDate(pageId,el){
+  const v=el.value;
+  if(!v)return;
+  try{
+    const r=await fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({pageId,field:'입사일',value:v})});
+    const d=await r.json();
+    if(!r.ok||d.error)throw new Error(d.error||'Error');
+    toast('✓ 입사일 저장됨');
+    const rec=rows.find(x=>x.id===pageId);
+    if(rec) rec['입사일']=v;
+    renderEmployees();renderStats();
+  }catch(e){toast('저장 실패: '+e.message,'err');}
 }
 let showRetired=false;
 function toggleRetired(){showRetired=!showRetired;renderEmployees();}
