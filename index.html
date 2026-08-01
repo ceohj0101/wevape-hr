@@ -184,7 +184,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 </div>
 <div class="divider" id="empDivider" style="display:none"></div>
 <div class="emp-section" id="empSection" style="display:none">
-  <div class="section-hd"><div class="section-dot"></div><span class="section-title">재직중 직원</span><span class="section-cnt" id="empCnt">0명</span></div>
+  <div class="section-hd"><div class="section-dot"></div><span class="section-title">재직중 직원</span><span class="section-cnt" id="empCnt">0명</span><button class="section-cnt" id="retiredToggle" style="display:none;cursor:pointer;margin-left:4px" onclick="toggleRetired()"></button></div>
   <div class="emp-grid" id="empGrid"></div>
 </div>
 <div class="footer">We Vape — 신입 면접 관리 내부 운영 자료 · <a href="https://app.notion.com/p/8887bdc6711744e78475aed069f808ca" target="_blank">노션 원본</a></div>
@@ -319,21 +319,28 @@ function showError(msg){
 function renderStats(){
   const applicants=rows.filter(r=>r['진행상태']!=='최종합격').length;
   const inP=cnt('서류접수')+cnt('서류합격')+cnt('면접대기')+cnt('면접예정')+cnt('면접완료');
+  const ym=(d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'))(new Date());
+  const newHires=rows.filter(r=>r['진행상태']==='최종합격'&&(r['입사일']||'').startsWith(ym)).length;
   document.getElementById('stats').innerHTML=`
     <div class="stat-card"><div class="stat-label">총 지원자</div><div class="stat-num">${applicants}</div></div>
     <div class="stat-card accent"><div class="stat-label">진행 중</div><div class="stat-num">${inP}</div></div>
     <div class="stat-card green"><div class="stat-label">재직중</div><div class="stat-num">${rows.filter(r=>r['진행상태']==='최종합격'&&!r['퇴사일']).length}</div></div>
+    <div class="stat-card accent"><div class="stat-label">이달 합격</div><div class="stat-num">${newHires}</div></div>
     <div class="stat-card red"><div class="stat-label">불합격·불참</div><div class="stat-num">${cntRej()}</div></div>`;
 }
 
 // ===== EMPLOYEES =====
 function renderEmployees(){
   const emps=rows.filter(r=>r['진행상태']==='최종합격'&&!r['퇴사일']);
+  const retired=rows.filter(r=>r['진행상태']==='최종합격'&&r['퇴사일']);
+  retired.sort((a,b)=>(b['퇴사일']||'')<(a['퇴사일']||'')?-1:1);
   emps.sort((a,b)=>{const da=a['입사일'],db=b['입사일'];if(!da&&!db)return 0;if(!da)return 1;if(!db)return -1;return da<db?-1:da>db?1:0;});
   const sec=document.getElementById('empSection'),div=document.getElementById('empDivider');
-  if(!emps.length){sec.style.display='none';div.style.display='none';return;}
+  if(!emps.length&&!retired.length){sec.style.display='none';div.style.display='none';return;}
   sec.style.display='block';div.style.display='block';
   document.getElementById('empCnt').textContent=emps.length+'명';
+  const rtb=document.getElementById('retiredToggle');
+  if(retired.length){rtb.style.display='inline-block';rtb.textContent=showRetired?'퇴사자 숨기기':'퇴사자 '+retired.length+'명 보기';}else rtb.style.display='none';
   document.getElementById('empGrid').innerHTML=emps.map((r,i)=>{
     const ten=r['입사일']?tenure(r['입사일']):'';
     const isOpen=empOpenIdx===i;
@@ -348,6 +355,17 @@ function renderEmployees(){
       <div class="emp-detail">${r['연락처']?esc(r['연락처']):'-'}<div style="margin-top:8px;text-align:right"><button class="del-btn" onclick="retireEmp('${r.id}','${esc(r['이름']||'')}',event)">퇴사 처리</button></div></div>
     </div>`;
   }).join('');
+  if(showRetired&&retired.length){
+    document.getElementById('empGrid').innerHTML+=retired.map(r=>`<div class="emp-card" style="opacity:.55;border-left-color:#94a3b8">
+      <div class="emp-card-head">
+        <div class="emp-avatar" style="background:#94a3b8">${esc((r['이름']||'?').slice(0,1))}</div>
+        <div><div class="emp-name">${esc(r['이름']||'')}</div>
+        <div class="emp-role">퇴사 ${(r['퇴사일']||'').substring(0,10)}</div></div>
+        ${r['입사일']?`<div class="emp-tenure" style="color:#64748b;background:rgba(100,116,139,.12)">${tenure2(r['입사일'],r['퇴사일'])}</div>`:''}
+      </div>
+      ${r['입사일']?`<div class="emp-hire" style="color:#64748b">📅 ${r['입사일'].substring(0,10)} ~ ${(r['퇴사일']||'').substring(0,10)}</div>`:''}
+    </div>`).join('');
+  }
 }
 async function retireEmp(pageId,name,e){
   e.stopPropagation();
@@ -365,6 +383,15 @@ async function retireEmp(pageId,name,e){
     empOpenIdx=null;
     renderAll();
   }catch(err){toast('퇴사 처리 실패: '+err.message,'err');}
+}
+let showRetired=false;
+function toggleRetired(){showRetired=!showRetired;renderEmployees();}
+function tenure2(d1,d2){
+  const s=new Date(d1.substring(0,10)),n=new Date(d2.substring(0,10));
+  let y=n.getFullYear()-s.getFullYear(),m=n.getMonth()-s.getMonth();
+  if(n.getDate()<s.getDate())m--;
+  if(m<0){y--;m+=12;}
+  return (y>0?y+'년 ':'')+(m>0?m+'개월':y>0?'':'1개월 미만')+' 근무';
 }
 function toggleEmp(i){empOpenIdx=empOpenIdx===i?null:i;renderEmployees();}
 
