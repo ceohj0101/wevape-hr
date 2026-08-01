@@ -367,6 +367,7 @@ function renderEmployees(){
         ${r['입사일']?`<div class="emp-tenure" style="color:#64748b;background:rgba(100,116,139,.12)">${tenure2(r['입사일'],r['퇴사일'])}</div>`:''}
       </div>
       ${r['입사일']?`<div class="emp-hire" style="color:#64748b">📅 ${r['입사일'].substring(0,10)} ~ ${(r['퇴사일']||'').substring(0,10)}</div>`:''}
+      <div style="margin-top:8px;text-align:right"><button class="del-btn" onclick="deleteApplicant('${r.id}',event)">🗑 삭제</button></div>
     </div>`).join('');
   }
 }
