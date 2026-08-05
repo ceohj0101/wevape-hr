@@ -178,6 +178,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
   <div id="mainContent" style="display:none">
     <div id="errorBox" style="display:none"></div>
     <div class="filter-row" id="filterRow"></div>
+    <div class="filter-row" id="monthFilterRow"></div>
     <div class="grid" id="grid"></div>
     <div class="empty" id="emptyEl" style="display:none"><div class="empty-icon">🔍</div><p>해당 조건의 지원자가 없어요.</p></div>
   </div>
@@ -277,7 +278,7 @@ const STAGE_ACTIONS = {
   '콜백없음':[{label:'↺ 재검토',next:'서류접수',cls:'retry'}],
 };
 const AV=['#6366f1','#8b5cf6','#ec4899','#0ea5e9','#f97316','#22c55e','#a855f7','#14b8a6','#f59e0b'];
-let rows=[], flt='all', openIdx=null, empOpenIdx=null, _imgBase64=null, _imgOrigUrl=null;
+let rows=[], flt='all', monthFlt='all', openIdx=null, empOpenIdx=null, _imgBase64=null, _imgOrigUrl=null;
 
 // ===== DATA =====
 async function loadData(){
@@ -307,7 +308,7 @@ async function loadData(){
   renderAll();
 }
 
-function renderAll(){renderStats();renderEmployees();renderPipeline();renderFilters();renderCards();}
+function renderAll(){renderStats();renderEmployees();renderPipeline();renderFilters();renderMonthFilters();renderCards();}
 const cnt=s=>rows.filter(r=>r['진행상태']===s).length;
 
 function showError(msg){
@@ -449,10 +450,43 @@ function renderFilters(){
 function setFilter(f){flt=f;openIdx=null;renderPipeline();renderFilters();renderCards();}
 function toggleCard(i){openIdx=openIdx===i?null:i;renderCards();}
 
+// ===== MONTH FILTER (면접일 기준) =====
+function monthLabel(ym,showYear){
+  const [y,m]=ym.split('-');
+  return (showYear?(y.slice(2)+'년 '):'')+parseInt(m,10)+'월';
+}
+function renderMonthFilters(){
+  const base=rows.filter(r=>r['진행상태']!=='최종합격');
+  const months=new Set();
+  let hasNone=false;
+  base.forEach(r=>{
+    const d=r['면접일'];
+    if(d) months.add(d.substring(0,7)); else hasNone=true;
+  });
+  const sorted=[...months].sort();
+  const showYear=new Set(sorted.map(m=>m.slice(0,4))).size>1;
+  const wrap=document.getElementById('monthFilterRow');
+  if(!sorted.length&&!hasNone){wrap.innerHTML='';return;}
+  let h=`<div class="chip${monthFlt==='all'?' active':''}" onclick="setMonthFilter('all')">전체 달</div>`;
+  sorted.forEach(ym=>{
+    h+=`<div class="chip${monthFlt===ym?' active':''}" onclick="setMonthFilter('${ym}')">${monthLabel(ym,showYear)}</div>`;
+  });
+  if(hasNone) h+=`<div class="chip${monthFlt==='none'?' active':''}" onclick="setMonthFilter('none')">미정</div>`;
+  wrap.innerHTML=h;
+}
+function setMonthFilter(m){monthFlt=m;openIdx=null;renderMonthFilters();renderCards();}
+
 // ===== CARDS =====
 function renderCards(){
   let base=rows.filter(r=>r['진행상태']!=='최종합격');
   if(flt!=='all') base=base.filter(r=>flt==='불합격'?REJ.includes(r['진행상태']):r['진행상태']===flt);
+  if(monthFlt!=='all'){
+    base=base.filter(r=>{
+      const d=r['면접일'];
+      if(monthFlt==='none') return !d;
+      return d&&d.substring(0,7)===monthFlt;
+    });
+  }
   // 면접일 기준 오름차순 정렬 (null 뒤로)
   base.sort((a,b)=>{
     const pa=a['진행상태']==='면접예정'?0:1,pb=b['진행상태']==='면접예정'?0:1;
