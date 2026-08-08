@@ -145,6 +145,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
 .lb-img{width:100%;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.5);display:block;margin-top:10px}
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a2035;color:#fff;border-radius:10px;padding:10px 18px;font-size:12px;font-weight:700;z-index:3000;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
 #toast.show{opacity:1}#toast.err{background:#dc2626}
+.app-shell{display:flex;align-items:flex-start}
+.sidebar{width:168px;flex-shrink:0;padding:20px 12px;position:sticky;top:0;display:flex;flex-direction:column;gap:6px}
+.side-btn{display:flex;align-items:center;gap:8px;padding:11px 14px;border-radius:10px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:800;cursor:pointer;text-align:left;transition:background .15s,color .15s;width:100%}
+.side-btn:hover{background:var(--bg3)}
+.side-btn.active{background:rgba(245,197,24,.16);color:#7a5f00}
+.main-view{flex:1;min-width:0}
+.att-input{width:38px;padding:3px 4px;text-align:center}
+@media (max-width:640px){.app-shell{flex-direction:column}.sidebar{flex-direction:row;width:100%;position:static;padding:12px 16px}}
 .footer{text-align:center;padding:20px;font-size:10px;color:rgba(255,255,255,.3);border-top:2px solid rgba(245,197,24,.2);margin-top:20px;background:linear-gradient(135deg,#0a0f1e 0%,#0d1424 100%)}
 .footer a{color:rgba(245,197,24,.5);text-decoration:none}
 </style>
@@ -171,22 +179,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans
   </div>
 </div>
 
-<div class="stats" id="stats"></div>
-<div class="pipeline-wrap"><div class="pipeline-title">채용 파이프라인</div><div class="pipeline" id="pipeline"></div></div>
-<div class="content">
-  <div class="loading" id="loadingEl"><div class="spinner"></div><p>데이터 불러오는 중...</p></div>
-  <div id="mainContent" style="display:none">
-    <div id="errorBox" style="display:none"></div>
-    <div class="filter-row" id="filterRow"></div>
-    <div class="filter-row" id="monthFilterRow"></div>
-    <div class="grid" id="grid"></div>
-    <div class="empty" id="emptyEl" style="display:none"><div class="empty-icon">🔍</div><p>해당 조건의 지원자가 없어요.</p></div>
+<div class="app-shell">
+  <nav class="sidebar">
+    <button class="side-btn active" id="navNew" onclick="switchView('new')">🆕 신입 정보</button>
+    <button class="side-btn" id="navEmp" onclick="switchView('emp')">👥 재직자 정보</button>
+  </nav>
+  <div class="main-view">
+    <div id="viewNew">
+      <div class="stats" id="stats"></div>
+      <div class="pipeline-wrap"><div class="pipeline-title">채용 파이프라인</div><div class="pipeline" id="pipeline"></div></div>
+      <div class="content">
+        <div class="loading" id="loadingEl"><div class="spinner"></div><p>데이터 불러오는 중...</p></div>
+        <div id="mainContent" style="display:none">
+          <div id="errorBox" style="display:none"></div>
+          <div class="filter-row" id="filterRow"></div>
+          <div class="filter-row" id="monthFilterRow"></div>
+          <div class="grid" id="grid"></div>
+          <div class="empty" id="emptyEl" style="display:none"><div class="empty-icon">🔍</div><p>해당 조건의 지원자가 없어요.</p></div>
+        </div>
+      </div>
+    </div>
+    <div id="viewEmp" style="display:none">
+      <div class="stats" id="empStats"></div>
+      <div class="emp-section" id="empSection" style="display:none;padding:16px 24px 24px">
+        <div class="section-hd"><div class="section-dot"></div><span class="section-title">재직중 직원</span><span class="section-cnt" id="empCnt">0명</span><button class="section-cnt" id="retiredToggle" style="display:none;cursor:pointer;margin-left:4px" onclick="toggleRetired()"></button></div>
+        <div class="emp-grid" id="empGrid"></div>
+      </div>
+      <div class="empty" id="empEmptyEl" style="display:none;padding:56px 24px"><div class="empty-icon">🧑‍💼</div><p>재직중인 직원이 없습니다.</p></div>
+    </div>
   </div>
-</div>
-<div class="divider" id="empDivider" style="display:none"></div>
-<div class="emp-section" id="empSection" style="display:none">
-  <div class="section-hd"><div class="section-dot"></div><span class="section-title">재직중 직원</span><span class="section-cnt" id="empCnt">0명</span><button class="section-cnt" id="retiredToggle" style="display:none;cursor:pointer;margin-left:4px" onclick="toggleRetired()"></button></div>
-  <div class="emp-grid" id="empGrid"></div>
 </div>
 <div class="footer">We Vape — 신입 면접 관리 내부 운영 자료 · <a href="https://app.notion.com/p/8887bdc6711744e78475aed069f808ca" target="_blank">노션 원본</a></div>
 
@@ -308,7 +329,15 @@ async function loadData(){
   renderAll();
 }
 
-function renderAll(){renderStats();renderEmployees();renderPipeline();renderFilters();renderMonthFilters();renderCards();}
+function renderAll(){renderStats();renderEmpStats();renderEmployees();renderPipeline();renderFilters();renderMonthFilters();renderCards();}
+
+// ===== SIDEBAR VIEW SWITCH =====
+function switchView(v){
+  document.getElementById('viewNew').style.display=v==='new'?'block':'none';
+  document.getElementById('viewEmp').style.display=v==='emp'?'block':'none';
+  document.getElementById('navNew').classList.toggle('active',v==='new');
+  document.getElementById('navEmp').classList.toggle('active',v==='emp');
+}
 const cnt=s=>rows.filter(r=>r['진행상태']===s).length;
 
 function showError(msg){
@@ -331,15 +360,55 @@ function renderStats(){
     <div class="stat-card red"><div class="stat-label">불합격·불참</div><div class="stat-num">${cntRej()}</div></div>`;
 }
 
+// ===== EMPLOYEE STATS (재직자 정보 탭) =====
+function renderEmpStats(){
+  const wrap=document.getElementById('empStats');
+  if(!wrap)return;
+  const emps=rows.filter(r=>r['진행상태']==='최종합격'&&!r['퇴사일']);
+  const ym=(d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'))(new Date());
+  const newThisMonth=emps.filter(r=>(r['입사일']||'').startsWith(ym)).length;
+  const withHire=emps.filter(r=>r['입사일']);
+  let avgMonths=0;
+  if(withHire.length){
+    const total=withHire.reduce((sum,r)=>{
+      const s=new Date(r['입사일'].substring(0,10)),n=new Date();
+      let m=(n.getFullYear()-s.getFullYear())*12+(n.getMonth()-s.getMonth());
+      if(n.getDate()<s.getDate())m--;
+      return sum+Math.max(m,0);
+    },0);
+    avgMonths=Math.round(total/withHire.length);
+  }
+  wrap.innerHTML=`
+    <div class="stat-card green"><div class="stat-label">재직 인원</div><div class="stat-num">${emps.length}</div></div>
+    <div class="stat-card accent"><div class="stat-label">이번달 입사</div><div class="stat-num">${newThisMonth}</div></div>
+    <div class="stat-card"><div class="stat-label">평균 근속(개월)</div><div class="stat-num">${avgMonths}</div></div>`;
+}
+
+// ===== ATTENDANCE (근태, 로컬 저장 — 기기별) =====
+function getAtt(pidClean){
+  try{return JSON.parse(localStorage.getItem('att_'+pidClean)||'{"absent":0,"late":0}');}catch(e){return {absent:0,late:0};}
+}
+function setAtt(pidClean,field,val){
+  const a=getAtt(pidClean);
+  a[field]=Math.max(0,parseInt(val)||0);
+  localStorage.setItem('att_'+pidClean,JSON.stringify(a));
+}
+function resetAtt(pidClean,e){
+  e.stopPropagation();
+  localStorage.setItem('att_'+pidClean,JSON.stringify({absent:0,late:0}));
+  renderEmployees();
+  toast('✓ 근태 초기화됨 (이 기기 기준)');
+}
+
 // ===== EMPLOYEES =====
 function renderEmployees(){
   const emps=rows.filter(r=>r['진행상태']==='최종합격'&&!r['퇴사일']);
   const retired=rows.filter(r=>r['진행상태']==='최종합격'&&r['퇴사일']);
   retired.sort((a,b)=>(b['퇴사일']||'')<(a['퇴사일']||'')?-1:1);
   emps.sort((a,b)=>{const da=a['입사일'],db=b['입사일'];if(!da&&!db)return 0;if(!da)return 1;if(!db)return -1;return da<db?-1:da>db?1:0;});
-  const sec=document.getElementById('empSection'),div=document.getElementById('empDivider');
-  if(!emps.length&&!retired.length){sec.style.display='none';div.style.display='none';return;}
-  sec.style.display='block';div.style.display='block';
+  const sec=document.getElementById('empSection'),eEmpty=document.getElementById('empEmptyEl');
+  if(!emps.length&&!retired.length){sec.style.display='none';if(eEmpty)eEmpty.style.display='block';return;}
+  sec.style.display='block';if(eEmpty)eEmpty.style.display='none';
   document.getElementById('empCnt').textContent=emps.length+'명';
   const rtb=document.getElementById('retiredToggle');
   if(retired.length){rtb.style.display='inline-block';rtb.textContent=showRetired?'퇴사자 숨기기':'퇴사자 '+retired.length+'명 보기';}else rtb.style.display='none';
@@ -350,6 +419,7 @@ function renderEmployees(){
     const imgUrl=r['이력서사진']||localStorage.getItem('img_'+pidClean);
     const empBirth=r['생년월일'];
     const empAgeStr=empBirth?`${new Date().getFullYear()-parseInt(empBirth.substring(0,4))}세`:'';
+    const att=getAtt(pidClean);
     return `<div class="emp-card${isOpen?' open':''}" onclick="toggleEmp(${i})">
       <div class="emp-card-head">
         <div class="emp-avatar">${esc((r['이름']||'?').slice(0,1))}</div>
@@ -359,7 +429,13 @@ function renderEmployees(){
         ${ten?`<div class="emp-tenure">${ten}</div>`:''}
       </div>
       ${r['입사일']?`<div class="emp-hire">📅 입사 ${r['입사일'].substring(0,10)}</div>`:''}
-      <div class="emp-detail">${r['연락처']?esc(r['연락처']):'-'}<div style="margin-top:8px;display:flex;gap:6px;align-items:center" onclick="event.stopPropagation()"><span style="font-size:10px;font-weight:700">📅 입사일</span><input class="time-input" type="date" value="${(r['입사일']||'').substring(0,10)}" onchange="saveHireDate('${r.id}',this)"></div><div style="margin-top:8px;text-align:right"><button class="del-btn" onclick="retireEmp('${r.id}','${esc(r['이름']||'')}',event)">퇴사 처리</button></div></div>
+      ${r['연락처']?`<div class="emp-hire" style="color:#475569">📞 ${esc(r['연락처'])}</div>`:''}
+      <div style="margin-top:7px;display:flex;gap:10px;align-items:center;font-size:10px;color:var(--muted)" onclick="event.stopPropagation()">
+        <span>결근 <input class="time-input att-input" type="number" min="0" value="${att.absent}" onchange="setAtt('${pidClean}','absent',this.value)"></span>
+        <span>지각 <input class="time-input att-input" type="number" min="0" value="${att.late}" onchange="setAtt('${pidClean}','late',this.value)"></span>
+        <button class="del-btn" style="padding:2px 7px;font-size:9px" onclick="resetAtt('${pidClean}',event)">초기화</button>
+      </div>
+      <div class="emp-detail"><div style="display:flex;gap:6px;align-items:center" onclick="event.stopPropagation()"><span style="font-size:10px;font-weight:700">📅 입사일</span><input class="time-input" type="date" value="${(r['입사일']||'').substring(0,10)}" onchange="saveHireDate('${r.id}',this)"></div><div style="margin-top:8px;text-align:right"><button class="del-btn" onclick="retireEmp('${r.id}','${esc(r['이름']||'')}',event)">퇴사 처리</button></div></div>
     </div>`;
   }).join('');
   if(showRetired&&retired.length){
