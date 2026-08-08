@@ -348,11 +348,13 @@ function renderEmployees(){
     const isOpen=empOpenIdx===i;
     const pid=r['id']||'',pidClean=pid.replace(/-/g,'');
     const imgUrl=r['이력서사진']||localStorage.getItem('img_'+pidClean);
+    const empBirth=r['생년월일'];
+    const empAgeStr=empBirth?`${new Date().getFullYear()-parseInt(empBirth.substring(0,4))}세`:'';
     return `<div class="emp-card${isOpen?' open':''}" onclick="toggleEmp(${i})">
       <div class="emp-card-head">
         <div class="emp-avatar">${esc((r['이름']||'?').slice(0,1))}</div>
         <div><div class="emp-name">${esc(r['이름']||'')}</div>
-        <div class="emp-role">${esc(r['지원직무']||'')}${r['지원매장']?' · '+esc(r['지원매장']):''}</div></div>
+        <div class="emp-role">${empAgeStr?empAgeStr+' · ':''}${esc(r['지원직무']||'')}${r['지원매장']?' · '+esc(r['지원매장']):''}</div></div>
         ${imgUrl?`<button class="resume-btn" onclick="event.stopPropagation();showResumeImg('${pidClean}','${imgUrl}')">🖼</button>`:''}
         ${ten?`<div class="emp-tenure">${ten}</div>`:''}
       </div>
